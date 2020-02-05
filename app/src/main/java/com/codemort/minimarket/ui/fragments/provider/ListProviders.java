@@ -92,12 +92,12 @@ public class ListProviders extends Fragment implements Response.Listener<JSONObj
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_provider, container, false);
+        View view = inflater.inflate(R.layout.fragment_list_providers, container, false);
         init(view);
 
         listProviders=new ArrayList<>();
 
-        recyclerProviders= (RecyclerView) view.findViewById(R.id.recyclerProviders);
+       // recyclerProviders= (RecyclerView) view.findViewById(R.id.recyclerProviders);
         recyclerProviders.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerProviders.setHasFixedSize(true);
 
@@ -124,7 +124,7 @@ public class ListProviders extends Fragment implements Response.Listener<JSONObj
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        Toast.makeText(getContext(), "No se puede conectar " + error.toString(), Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), "Sin Datos.", Toast.LENGTH_LONG).show();
         System.out.println();
         Log.d("ERROR: ", error.toString());
         progress.hide();
@@ -154,7 +154,7 @@ public class ListProviders extends Fragment implements Response.Listener<JSONObj
                 listProviders.add(provider);
             }
             progress.hide();
-            ProviderAdapter adapter = new ProviderAdapter(listProviders);
+            ProviderAdapter adapter = new ProviderAdapter(getContext(),listProviders);
             recyclerProviders.setAdapter(adapter);
 
         } catch (JSONException e) {

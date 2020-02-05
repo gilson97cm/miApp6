@@ -37,6 +37,13 @@
                         android:padding="10dp">
 
                         <TextView
+                            android:visibility="gone"
+                            android:id="@+id/cardIdProv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="prov001"
+                            android:textSize="13sp" />
+                        <TextView
                             android:id="@+id/cardCodeProv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

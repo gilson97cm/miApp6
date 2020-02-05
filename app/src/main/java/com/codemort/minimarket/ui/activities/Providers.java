@@ -95,15 +95,11 @@ public class Providers extends AppCompatActivity implements AddProvider.OnFragme
                 loadFragment(fragmentListProviders);
                 viewAP.setBackgroundColor(Color.WHITE);
                 viewLP.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-               // ft.replace(R.id.fragmentProvider, fragmentListProviders);
-                Toast.makeText(this, "lista", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnAddProvider:
                loadFragment(fragmentAddProvider);
                 viewLP.setBackgroundColor(Color.WHITE);
                 viewAP.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-                //ft.replace(R.id.fragmentProvider, fragmentAddProvider);
-                Toast.makeText(this, "Add", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
