@@ -35,6 +35,7 @@ import com.codemort.minimarket.helpers.Util;
 import com.codemort.minimarket.helpers.VolleySingleton;
 import com.codemort.minimarket.model.ProviderVo;
 import com.codemort.minimarket.ui.activities.Providers;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
 
@@ -107,6 +108,7 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
             btnCardMakeOrder = (Button) itemView.findViewById(R.id.btnCardMakeOrder);
             btnCardDestroyProv = (Button) itemView.findViewById(R.id.btnCardDestroyProv);
 
+
         }
 
         void setOnClickListeners() {
@@ -118,8 +120,8 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btnCardMakeOrder:
-
-                    Toast.makeText(context, "Realizar orden", Toast.LENGTH_SHORT).show();
+                    dialogOrder();
+                    // Toast.makeText(context, "Realizar orden", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.btnCardDestroyProv:
                     //  Toast.makeText(context, "Eliminar", Toast.LENGTH_SHORT).show();
@@ -131,7 +133,7 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
                         public void onClick(DialogInterface dialog, int which) {
                             String id = cardIdProv.getText().toString();
                             // Toast.makeText(context, "id: "+id, Toast.LENGTH_SHORT).show();
-                            webServiceEliminar(id);
+                            webServiceDelete(id);
                         }
                     });
                     builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -144,8 +146,9 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
                     break;
             }
         }
+
         //eliminar proveedor
-        private void webServiceEliminar(String id) {
+        private void webServiceDelete(String id) {
             progress = new ProgressDialog(context);
             progress.setMessage("Eliminando...");
             progress.show();
@@ -188,7 +191,52 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
         }
 
         //dialogo para el ingreso de la cantidad
+        private void dialogOrder() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.dialog_insert_cant, null);
+            builder.setView(view);
+           /*  builder.setView(inflater.inflate(R.layout.dialog_insert_cant,null))
+             .setPositiveButton("Reintentar", new DialogInterface.OnClickListener() {
+            @Override public void onClick(DialogInterface dialog, int which) {
+            Toast.makeText(context,"Conectando...",Toast.LENGTH_SHORT).show();
+            }
+            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override public void onClick(DialogInterface dialog, int which) {
+            Toast.makeText(context,"Cancel",Toast.LENGTH_SHORT).show();
+            }
+            });*/
+            final AlertDialog dialog = builder.create();
+            dialog.show();
+            TextInputEditText txtDialogCant = (TextInputEditText) view.findViewById(R.id.txtDialogCant);
+            TextView txtDialogNameProv = (TextView) view.findViewById(R.id.txtDialogNameProv);
+            TextView txtDialogEmailProv = (TextView) view.findViewById(R.id.txtDialogEmailProv);
+            TextView txtDialogProductProv = (TextView) view.findViewById(R.id.txtDialogProductProv);
+            Button btnDialogCancel = (Button) view.findViewById(R.id.btnDialogCancel);
+            Button btnDialogSendOrder = (Button) view.findViewById(R.id.btnDialogSendOrder);
 
+            txtDialogNameProv.setText(cardNameProv.getText().toString()+" "+cardLastNameProv.getText().toString() );
+            txtDialogEmailProv.setText(cardEmailProv.getText().toString());
+            txtDialogProductProv.setText(cardProductProv.getText().toString());
+
+
+            btnDialogSendOrder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, "Enviando...", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+            });
+            btnDialogCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Toast.makeText(context,"Enviando...",Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+            });
+        }
+
+        //enviar y registrar pedido
 
     }
 }

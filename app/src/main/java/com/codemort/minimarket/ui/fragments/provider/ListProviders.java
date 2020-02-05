@@ -103,6 +103,10 @@ public class ListProviders extends Fragment implements Response.Listener<JSONObj
 
         // request= Volley.newRequestQueue(getContext());
 
+      //  listRecord = new ArrayList<>();
+       // recyclerRecord = (RecyclerView) view.findViewById(R.id.recyclerRecords);
+        //recyclerRecord.setLayoutManager(new LinearLayoutManager(getContext()));
+
         cargarWebService();
         return view;
     }
