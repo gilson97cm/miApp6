@@ -68,16 +68,17 @@
                         android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:layout_weight="10"
-                        android:background="@drawable/border_color"
                         android:orientation="vertical">
 
-                        <com.google.android.material.textfield.TextInputEditText
+                        <EditText
+                            android:background="@drawable/border_color"
                             android:id="@+id/txtNameAdmin"
-                            style="@style/Widget.AppCompat.SeekBar.Discrete"
+                            style="@style/Widget.AppCompat.EditText"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:hint="Nombre"
-                            android:inputType="textCapWords" />
+                            android:inputType="textCapWords"
+                            android:paddingLeft="15dp" />
                     </LinearLayout>
 
                     <View
@@ -102,16 +103,18 @@
                         android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:layout_weight="10"
-                        android:background="@drawable/border_color"
                         android:orientation="vertical">
 
-                        <com.google.android.material.textfield.TextInputEditText
+                        <EditText
+                            android:background="@drawable/border_color"
+
                             android:id="@+id/txtLastNameAdmin"
-                            style="@style/Widget.AppCompat.SeekBar.Discrete"
+                            style="@style/Widget.AppCompat.EditText"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:hint="Apellido"
                             android:inputType="textCapWords"
+                            android:paddingLeft="15dp"
                             app:passwordToggleEnabled="true" />
 
                     </LinearLayout>
@@ -138,16 +141,17 @@
                         android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:layout_weight="10"
-                        android:background="@drawable/border_color"
                         android:orientation="vertical">
 
-                        <com.google.android.material.textfield.TextInputEditText
+                        <EditText
+                            android:background="@drawable/border_color"
                             android:id="@+id/txtPhoneAdmin"
-                            style="@style/Widget.AppCompat.SeekBar.Discrete"
+                            style="@style/Widget.AppCompat.EditText"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:hint="Teléfono"
-                            android:inputType="number" />
+                            android:inputType="number"
+                            android:paddingLeft="15dp" />
                     </LinearLayout>
 
                     <View
@@ -172,16 +176,16 @@
                         android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:layout_weight="10"
-                        android:background="@drawable/border_color"
                         android:orientation="vertical">
-
-                        <com.google.android.material.textfield.TextInputEditText
+                      <EditText
+                            android:background="@drawable/border_color"
                             android:id="@+id/txtEmailAdmin"
-                            style="@style/Widget.AppCompat.SeekBar.Discrete"
+                            style="@style/Widget.AppCompat.EditText"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:hint="Correo"
                             android:inputType="textEmailAddress"
+                            android:paddingLeft="15dp"
                             app:passwordToggleEnabled="true" />
 
                     </LinearLayout>
@@ -208,16 +212,17 @@
                         android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:layout_weight="10"
-                        android:background="@drawable/border_color"
                         android:orientation="vertical">
 
-                        <com.google.android.material.textfield.TextInputEditText
+                        <EditText
+                            android:background="@drawable/border_color"
                             android:id="@+id/txtPassAdmin"
-                            style="@style/Widget.AppCompat.SeekBar.Discrete"
+                            style="@style/Widget.AppCompat.EditText"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:hint="Contraseña"
-                            android:inputType="textPassword" />
+                            android:inputType="textPassword"
+                            android:paddingLeft="15dp" />
                     </LinearLayout>
 
                     <View
@@ -242,16 +247,17 @@
                         android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:layout_weight="10"
-                        android:background="@drawable/border_color"
                         android:orientation="vertical">
 
-                        <com.google.android.material.textfield.TextInputEditText
+                        <EditText
+                            android:background="@drawable/border_color"
                             android:id="@+id/txtConfirmPass"
-                            style="@style/Widget.AppCompat.SeekBar.Discrete"
+                            style="@style/Widget.AppCompat.EditText"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:hint="Confirmar Contraseña"
                             android:inputType="textPassword"
+                            android:paddingLeft="15dp"
                             app:passwordToggleEnabled="true" />
 
                     </LinearLayout>
@@ -284,7 +290,7 @@
 
                         <Button
                             android:id="@+id/btnRegisterUser"
-                            style="@style/Widget.AppCompat.SeekBar.Discrete"
+                            style="@style/Widget.AppCompat.Button.Borderless.Colored"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Registrarse"
@@ -318,12 +324,12 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:layout_marginTop="10dp"
-                        android:textAlignment="center"
                         android:id="@+id/btnGoToLogin"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="10dp"
                         android:text="Volver"
+                        android:textAlignment="center"
                         android:textColor="@color/colorPrimaryDark"
                         android:textStyle="bold" />
 

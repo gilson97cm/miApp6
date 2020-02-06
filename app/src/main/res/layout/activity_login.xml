@@ -47,12 +47,14 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="10"
-                    android:background="@drawable/border_color"
+
                     android:orientation="vertical">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <EditText
+                        android:paddingLeft="10dp"
+                        android:background="@drawable/border_color"
                         android:id="@+id/txtEmail"
-                        style="@style/Widget.AppCompat.SeekBar.Discrete"
+                        style="@style/Widget.AppCompat.EditText"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:hint="Correo"
@@ -81,12 +83,14 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="10"
-                    android:background="@drawable/border_color"
+
                     android:orientation="vertical">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <EditText
+                        android:paddingLeft="10dp"
+                        android:background="@drawable/border_color"
                         android:id="@+id/txtPass"
-                        style="@style/Widget.AppCompat.SeekBar.Discrete"
+                        style="@style/Widget.AppCompat.EditText"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:hint="Contraseña"
@@ -122,7 +126,7 @@
 
                     <Button
                         android:id="@+id/btnLogin"
-                        style="@style/Widget.AppCompat.SeekBar.Discrete"
+                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Iniciar Sesión"

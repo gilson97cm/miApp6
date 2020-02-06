@@ -29,10 +29,16 @@ public class PresentationActivity extends AppCompatActivity {
                 SharedPreferences preferences = getSharedPreferences("dataLogin", Context.MODE_PRIVATE);
                 Boolean session = preferences.getBoolean("session",false);
                String name = preferences.getString("name",null);
+               String last_name = preferences.getString("last_name",null);
+               String phone = preferences.getString("phone",null);
+               String email = preferences.getString("email",null);
 
                 if(session){
                     Intent intent = new Intent(PresentationActivity.this, Home.class);
                     intent.putExtra("name",name);
+                    intent.putExtra("last_name",last_name);
+                    intent.putExtra("phone",phone);
+                    intent.putExtra("email",email);
                     startActivity(intent);
                     finish();
                 }else {

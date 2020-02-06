@@ -31,15 +31,23 @@ import java.util.ArrayList;
 
 public class Home extends AppCompatActivity implements View.OnClickListener {
 
+    TextView lblNameUser;
     TextView lblName;
+    TextView lblLastName;
+    TextView lblPhone;
+    TextView lblEmail;
+
     Toolbar toolbar;
-    String name;
+    //String name;
     CardView cardGoToProducts;
     CardView cardGoToProvider;
     CardView cardGoToMakeOrder;
     CardView cardGoToMyOrders;
 
     String nameLogin;
+    String last_nameLogin;
+    String phoneLogin;
+    String emailLogin;
 
 
     @Override
@@ -55,9 +63,16 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            name = extras.getString("name");
+            nameLogin = extras.getString("name");
+            last_nameLogin = extras.getString("last_name");
+            phoneLogin = extras.getString("phone");
+            emailLogin = extras.getString("email");
 
-            lblName.setText(name);
+            lblNameUser.setText(nameLogin+" "+last_nameLogin);
+            lblName.setText(nameLogin);
+            lblLastName.setText(last_nameLogin);
+            lblPhone.setText(phoneLogin);
+            lblEmail.setText(emailLogin);
             //loadGreenHouseDetail(idinvernadero);
         }
     }
@@ -96,6 +111,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                 preferences.edit().clear().commit();
                 Intent i = new Intent(Home.this, Login.class);
                 i.putExtra("name", nameLogin);
+                i.putExtra("last_name", last_nameLogin);
+                i.putExtra("phone", phoneLogin);
+                i.putExtra("email", emailLogin);
                 startActivity(i);
                 finish();
             }
@@ -119,24 +137,36 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
             case R.id.cardGoToProducts:
                 i = new Intent(Home.this, Products.class);
                 i.putExtra("name", nameLogin);
+                i.putExtra("last_name", last_nameLogin);
+                i.putExtra("phone", phoneLogin);
+                i.putExtra("email", emailLogin);
 
                 Toast.makeText(this, "Productos.", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.cardGoToProvider:
                 i = new Intent(Home.this, Providers.class);
                 i.putExtra("name", nameLogin);
+                i.putExtra("last_name", last_nameLogin);
+                i.putExtra("phone", phoneLogin);
+                i.putExtra("email", emailLogin);
 
                 Toast.makeText(this, "Proveedores.", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.cardGoToMakeOrder:
                 i = new Intent(Home.this, MakeOrder.class);
                 i.putExtra("name", nameLogin);
+                i.putExtra("last_name", last_nameLogin);
+                i.putExtra("phone", phoneLogin);
+                i.putExtra("email", emailLogin);
 
                 Toast.makeText(this, "Realizar Pedido.", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.cardGoToMyOrders:
                 i = new Intent(Home.this, MyOrders.class);
                 i.putExtra("name", nameLogin);
+                i.putExtra("last_name", last_nameLogin);
+                i.putExtra("phone", phoneLogin);
+                i.putExtra("email", emailLogin);
 
                 Toast.makeText(this, "Pedidos realizados.", Toast.LENGTH_SHORT).show();
                 break;
@@ -149,7 +179,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
 
     private void init() {
         toolbar = (Toolbar) findViewById(R.id.toolbarHome);
+        lblNameUser = (TextView) findViewById(R.id.lblNameUser);
         lblName = (TextView) findViewById(R.id.lblName);
+       lblLastName = (TextView) findViewById(R.id.lblLastName);
+        lblPhone = (TextView) findViewById(R.id.lblPhone);
+        lblEmail = (TextView) findViewById(R.id.lblEmail);
 
         cardGoToProducts = (CardView) findViewById(R.id.cardGoToProducts);
         cardGoToProvider = (CardView) findViewById(R.id.cardGoToProvider);

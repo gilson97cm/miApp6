@@ -26,7 +26,7 @@ import com.codemort.minimarket.helpers.Util;
 import com.codemort.minimarket.helpers.VolleySingleton;
 import com.codemort.minimarket.ui.activities.AdminRegister;
 import com.codemort.minimarket.ui.activities.Login;
-import com.google.android.material.textfield.TextInputEditText;
+import android.widget.EditText;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,12 +44,12 @@ public class AddProvider extends Fragment implements View.OnClickListener {
     ProgressDialog progress;
     StringRequest stringRequest;
     //instancias
-    TextInputEditText txtCodeProv;
-    TextInputEditText txtNameProv;
-    TextInputEditText txtLastNameProv;
-    TextInputEditText txtProductProv;
-    TextInputEditText txtPhoneProv;
-    TextInputEditText txtEmailProv;
+    EditText txtCodeProv;
+    EditText txtNameProv;
+    EditText txtLastNameProv;
+    EditText txtProductProv;
+    EditText txtPhoneProv;
+    EditText txtEmailProv;
     Button btnRegisterProv;
     ListProviders fragmentListProviders;
 
@@ -105,12 +105,12 @@ public class AddProvider extends Fragment implements View.OnClickListener {
     }
 
     private void init(View view) {
-        txtCodeProv = (TextInputEditText) view.findViewById(R.id.txtCodeProv);
-        txtNameProv = (TextInputEditText) view.findViewById(R.id.txtNameProv);
-        txtLastNameProv = (TextInputEditText) view.findViewById(R.id.txtLastNameProv);
-        txtProductProv = (TextInputEditText) view.findViewById(R.id.txtProductProv);
-        txtPhoneProv = (TextInputEditText) view.findViewById(R.id.txtPhoneProv);
-        txtEmailProv = (TextInputEditText) view.findViewById(R.id.txtEmailProv);
+        txtCodeProv = (EditText) view.findViewById(R.id.txtCodeProv);
+        txtNameProv = (EditText) view.findViewById(R.id.txtNameProv);
+        txtLastNameProv = (EditText) view.findViewById(R.id.txtLastNameProv);
+        txtProductProv = (EditText) view.findViewById(R.id.txtProductProv);
+        txtPhoneProv = (EditText) view.findViewById(R.id.txtPhoneProv);
+        txtEmailProv = (EditText) view.findViewById(R.id.txtEmailProv);
         btnRegisterProv = (Button) view.findViewById(R.id.btnRegisterProv);
 
         fragmentListProviders = new ListProviders();

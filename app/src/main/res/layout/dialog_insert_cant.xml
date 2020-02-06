@@ -5,90 +5,103 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="vertical">
+
         <TextView
-            android:layout_margin="10dp"
-            android:textAlignment="center"
-            android:textStyle="bold"
-            android:text="Realizar Pedido"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/colorPrimary"
+            android:gravity="center|top"
+            android:text="Realizar Pedido"
+            android:textColor="@color/md_white_1000"
+            android:textStyle="bold" />
 
-       <LinearLayout
-           android:paddingLeft="15dp"
-           android:orientation="vertical"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content">
-           <LinearLayout
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:orientation="horizontal">
-
-               <TextView
-                   android:layout_width="0dp"
-                   android:layout_height="wrap_content"
-                   android:layout_weight="1"
-                   android:text="Proveedor:"
-                   android:textStyle="bold" />
-
-               <TextView
-                   android:id="@+id/txtDialogNameProv"
-                   android:layout_width="0dp"
-                   android:layout_height="wrap_content"
-                   android:layout_weight="3"
-                   android:text="codemortphone"
-                   android:textColor="@android:color/darker_gray" />
-           </LinearLayout>
-           <LinearLayout
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:orientation="horizontal">
-
-               <TextView
-                   android:layout_width="0dp"
-                   android:layout_height="wrap_content"
-                   android:layout_weight="1"
-                   android:text="Correo:"
-                   android:textStyle="bold" />
-
-               <TextView
-                   android:id="@+id/txtDialogEmailProv"
-                   android:layout_width="0dp"
-                   android:layout_height="wrap_content"
-                   android:layout_weight="3"
-                   android:text="codemortphone"
-                   android:textColor="@android:color/darker_gray" />
-           </LinearLayout>
-           <LinearLayout
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:orientation="horizontal">
-
-               <TextView
-                   android:layout_width="0dp"
-                   android:layout_height="wrap_content"
-                   android:layout_weight="1"
-                   android:text="Producto:"
-                   android:textStyle="bold" />
-
-               <TextView
-                   android:id="@+id/txtDialogProductProv"
-                   android:layout_width="0dp"
-                   android:layout_height="wrap_content"
-                   android:layout_weight="3"
-                   android:text="codemortphone"
-                   android:textColor="@android:color/darker_gray" />
-           </LinearLayout>
-
-       </LinearLayout>
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/txtDialogIdProv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp" />
 
         <LinearLayout
-            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Proveedor:"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtDialogNameProv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:text="codemortphone"
+                    android:textColor="@android:color/darker_gray" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Correo:"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtDialogEmailProv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:text="codemortphone"
+                    android:textColor="@android:color/darker_gray" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Producto:"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtDialogProductProv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:text="codemortphone"
+                    android:textColor="@android:color/darker_gray" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:layout_margin="10dp"
             android:background="@drawable/border_color"
             android:orientation="vertical">
 
@@ -99,12 +112,13 @@
                 android:layout_height="40dp"
                 android:hint="Cantidad"
                 android:inputType="number"
-                android:maxLength="3"/>
+                android:maxLength="3" />
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@color/md_grey_50"/>
+            android:background="@color/md_grey_50" />
 
         <LinearLayout
             android:layout_width="match_parent"

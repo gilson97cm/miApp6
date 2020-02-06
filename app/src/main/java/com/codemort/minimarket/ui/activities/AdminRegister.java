@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,12 +28,12 @@ import java.util.Map;
 public class AdminRegister extends AppCompatActivity implements View.OnClickListener {
     TextView btnGoToLogin;
 
-    TextView txtNameAdmin;
-    TextView txtLastNameAdmin;
-    TextView txtPhoneAdmin;
-    TextView txtEmailAdmin;
-    TextView txtPassAdmin;
-    TextView txtConfirmPass;
+    EditText txtNameAdmin;
+    EditText txtLastNameAdmin;
+    EditText txtPhoneAdmin;
+    EditText txtEmailAdmin;
+    EditText txtPassAdmin;
+    EditText txtConfirmPass;
 
     Button btnRegisterUser;
     ProgressDialog progress;
@@ -66,12 +67,12 @@ public class AdminRegister extends AppCompatActivity implements View.OnClickList
         btnGoToLogin = (TextView) findViewById(R.id.btnGoToLogin);
 
         btnRegisterUser = (Button) findViewById(R.id.btnRegisterUser);
-        txtNameAdmin = (TextView) findViewById(R.id.txtNameAdmin);
-        txtLastNameAdmin = (TextView) findViewById(R.id.txtLastNameAdmin);
-        txtPhoneAdmin = (TextView) findViewById(R.id.txtPhoneAdmin);
-        txtEmailAdmin = (TextView) findViewById(R.id.txtEmailAdmin);
-        txtPassAdmin = (TextView) findViewById(R.id.txtPassAdmin);
-        txtConfirmPass = (TextView) findViewById(R.id.txtConfirmPass);
+        txtNameAdmin = (EditText) findViewById(R.id.txtNameAdmin);
+        txtLastNameAdmin = (EditText) findViewById(R.id.txtLastNameAdmin);
+        txtPhoneAdmin = (EditText) findViewById(R.id.txtPhoneAdmin);
+        txtEmailAdmin = (EditText) findViewById(R.id.txtEmailAdmin);
+        txtPassAdmin = (EditText) findViewById(R.id.txtPassAdmin);
+        txtConfirmPass = (EditText) findViewById(R.id.txtConfirmPass);
 
         btnRegisterUser.setOnClickListener(this);
         btnGoToLogin.setOnClickListener(this);

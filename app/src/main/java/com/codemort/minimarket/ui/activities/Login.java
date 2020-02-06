@@ -22,7 +22,7 @@ import com.codemort.minimarket.R;
 import com.codemort.minimarket.helpers.Util;
 import com.codemort.minimarket.helpers.VolleySingleton;
 import com.codemort.minimarket.model.UserVo;
-import com.google.android.material.textfield.TextInputEditText;
+import android.widget.EditText;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,8 +34,8 @@ import java.util.Map;
 public class Login extends AppCompatActivity implements View.OnClickListener {
     //   Toolbar toolbar;
     TextView btnGoToRegister;
-    TextInputEditText txtEmail;
-    TextInputEditText txtPass;
+    EditText txtEmail;
+    EditText txtPass;
     Button btnLogin;
 
     ProgressDialog progress;
@@ -55,8 +55,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     private void init() {
         btnGoToRegister = (TextView) findViewById(R.id.btnGoToRegister);
-        txtEmail = (TextInputEditText) findViewById(R.id.txtEmail);
-        txtPass = (TextInputEditText) findViewById(R.id.txtPass);
+        txtEmail = (EditText) findViewById(R.id.txtEmail);
+        txtPass = (EditText) findViewById(R.id.txtPass);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnGoToRegister.setOnClickListener(this);
         btnLogin.setOnClickListener(this);
@@ -130,10 +130,14 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     name = userVo.getName();
                     last_name = userVo.getLast_name();
                     phone = userVo.getPhone();
+                    email = userVo.getEmail();
 
                     saveData();
                     Intent intent = new Intent(Login.this, Home.class);
                     intent.putExtra("name",name);
+                    intent.putExtra("last_name",last_name);
+                    intent.putExtra("email",email);
+                    intent.putExtra("phone",phone);
                     startActivity(intent);
                     finish();
                 }else {

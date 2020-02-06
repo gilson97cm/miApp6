@@ -8,7 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.StrictMode;
 import android.provider.MediaStore;
+
 import android.transition.Fade;
 import android.transition.Transition;
 import android.util.Log;
@@ -25,6 +27,8 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -37,7 +41,18 @@ import com.codemort.minimarket.model.ProviderVo;
 import com.codemort.minimarket.ui.activities.Providers;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.ProviderViewHolder> {
     Transition transition;
@@ -48,6 +63,18 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
     ProgressDialog progress;
     JsonObjectRequest jsonObjectRequest;
     StringRequest stringRequest;//SE MODIFICA
+
+    TextInputEditText txtDialogCant;
+    TextView txtDialogIdProv;
+    TextView txtDialogNameProv;
+    TextView txtDialogEmailProv;
+    TextView txtDialogProductProv;
+    Button btnDialogCancel;
+    Button btnDialogSendOrder;
+
+    //enviar email
+    String your_email;
+    String your_pass;
 
     public ProviderAdapter(Context context, List<ProviderVo> listProviders) {
         this.listProviders = listProviders;
@@ -196,34 +223,27 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.dialog_insert_cant, null);
             builder.setView(view);
-           /*  builder.setView(inflater.inflate(R.layout.dialog_insert_cant,null))
-             .setPositiveButton("Reintentar", new DialogInterface.OnClickListener() {
-            @Override public void onClick(DialogInterface dialog, int which) {
-            Toast.makeText(context,"Conectando...",Toast.LENGTH_SHORT).show();
-            }
-            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override public void onClick(DialogInterface dialog, int which) {
-            Toast.makeText(context,"Cancel",Toast.LENGTH_SHORT).show();
-            }
-            });*/
             final AlertDialog dialog = builder.create();
             dialog.show();
-            TextInputEditText txtDialogCant = (TextInputEditText) view.findViewById(R.id.txtDialogCant);
-            TextView txtDialogNameProv = (TextView) view.findViewById(R.id.txtDialogNameProv);
-            TextView txtDialogEmailProv = (TextView) view.findViewById(R.id.txtDialogEmailProv);
-            TextView txtDialogProductProv = (TextView) view.findViewById(R.id.txtDialogProductProv);
-            Button btnDialogCancel = (Button) view.findViewById(R.id.btnDialogCancel);
-            Button btnDialogSendOrder = (Button) view.findViewById(R.id.btnDialogSendOrder);
+            txtDialogCant = (TextInputEditText) view.findViewById(R.id.txtDialogCant);
+            txtDialogIdProv = (TextView) view.findViewById(R.id.txtDialogIdProv);
+            txtDialogNameProv = (TextView) view.findViewById(R.id.txtDialogNameProv);
+            txtDialogEmailProv = (TextView) view.findViewById(R.id.txtDialogEmailProv);
+            txtDialogProductProv = (TextView) view.findViewById(R.id.txtDialogProductProv);
+            btnDialogCancel = (Button) view.findViewById(R.id.btnDialogCancel);
+            btnDialogSendOrder = (Button) view.findViewById(R.id.btnDialogSendOrder);
 
-            txtDialogNameProv.setText(cardNameProv.getText().toString()+" "+cardLastNameProv.getText().toString() );
+            txtDialogNameProv.setText(cardNameProv.getText().toString() + " " + cardLastNameProv.getText().toString());
             txtDialogEmailProv.setText(cardEmailProv.getText().toString());
             txtDialogProductProv.setText(cardProductProv.getText().toString());
+            txtDialogIdProv.setText(cardIdProv.getText().toString());
 
 
             btnDialogSendOrder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context, "Enviando...", Toast.LENGTH_SHORT).show();
+                    validate();
+                    //Toast.makeText(context, "Enviando...", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
             });
@@ -237,6 +257,116 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
         }
 
         //enviar y registrar pedido
+        private void validate() {
+            String name_product = txtDialogProductProv.getText().toString();
+            String cant_product = txtDialogCant.getText().toString();
+            String prov_id = txtDialogIdProv.getText().toString();
+            if (name_product.isEmpty() || cant_product.isEmpty() || prov_id.isEmpty()) {
+                Toast.makeText(context, "Hay campos vacios.", Toast.LENGTH_SHORT).show();
+            } else {
+                cargarWebService();
+            }
+        }
+
+        private void cargarWebService() {
+
+            progress = new ProgressDialog(context);
+            progress.setMessage("Enviando...");
+            progress.show();
+
+            //  String ip=getString(R.string.ip);
+            Util util = new Util();
+
+            String URL = util.getHost() + "wsJSONRegisterOrders.php";
+
+            //  String url=ip+"/ejemploBDRemota/wsJSONRegistroMovil.php?";
+
+            stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+
+                @Override
+                public void onResponse(String response) {
+                    progress.hide();
+
+                    if (response.trim().equalsIgnoreCase("registra")) {
+                        //txtDialogCant.setText("");
+                        sendMail();
+                        // photoPlant.setImageResource(R.drawable.not_photo);
+                        Toast.makeText(context, "Se ha enviado con exito", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        Toast.makeText(context, "No se ha registrado ", Toast.LENGTH_SHORT).show();
+                        Log.i("RESPUESTA: ", "" + response);
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(context, "No se ha podido conectar", Toast.LENGTH_SHORT).show();
+                    progress.hide();
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+
+                    String name_product = txtDialogProductProv.getText().toString();
+                    String cant_product = txtDialogCant.getText().toString();
+                    String prov_id = txtDialogIdProv.getText().toString();
+                    Map<String, String> parametros = new HashMap<>();
+
+                    parametros.put("name_product", name_product);
+                    parametros.put("cant_product", cant_product);
+                    parametros.put("prov_id", prov_id);
+
+                    return parametros;
+                }
+            };
+            stringRequest.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 2, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            VolleySingleton.getIntanciaVolley(context).addToRequestQueue(stringRequest);
+        }
+
+        private void sendMail() {
+            your_email = "elizabethminimarket@gmail.com";
+            your_pass = "doris_saquinga";
+            Session session = null;
+
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            Properties properties = new Properties();
+            properties.put("mail.smtp.host", "smtp.googlemail.com");
+            properties.put("mail.smtp.socketFactory.port", "465");
+            properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+            properties.put("mail.smtp.auth", "true");
+            properties.put("mail.smtp.port", "465");
+
+            try {
+                session = Session.getDefaultInstance(properties, new Authenticator() {
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(your_email, your_pass);
+                    }
+                });
+
+                if (session != null) {
+                    Message message = new MimeMessage(session);
+                    message.setFrom(new InternetAddress(your_email));
+                    message.setSubject("Pedido Minimarket");
+                    message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(txtDialogEmailProv.getText().toString()));
+                    message.setContent("<h4><strong>MINIMARKET ELIZABETH</strong><h4> <br>" +
+                            "<hr>"+
+                            "<strong>Detalle de pedido:</strong><br>" +
+                            "<hr>"+
+                            "PRODUCTO: <strong>"+txtDialogProductProv.getText().toString()+"</strong><br>"+
+                            "CANTIDAD: <strong>"+txtDialogCant.getText().toString()+"</strong>", "text/html; charset=utf-8");
+                    Transport.send(message);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
 
     }
 }

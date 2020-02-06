@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import java.io.ByteArrayOutputStream;
 
 public class Util {
-    final static String URL = "http://192.168.100.43/minimarket1/";
+    final static String URL = "http://10.198.43.254/minimarket1/";
 
     public String getHost() {
         return URL;

@@ -26,7 +26,11 @@ public class Providers extends AppCompatActivity implements AddProvider.OnFragme
     View viewLP;
     View viewAP;
 
-    String name;
+    //viene del home
+     String nameHome;
+     String last_nameHome;
+     String phoneHome;
+     String emailHome;
 
     AddProvider fragmentAddProvider;
     ListProviders fragmentListProviders;
@@ -44,7 +48,10 @@ public class Providers extends AppCompatActivity implements AddProvider.OnFragme
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            name = extras.getString("name");
+            nameHome = extras.getString("name");
+            last_nameHome = extras.getString("last_name");
+            phoneHome = extras.getString("phone");
+            emailHome = extras.getString("email");
             //loadGreenHouseDetail(idinvernadero);
         }
 
@@ -53,7 +60,10 @@ public class Providers extends AppCompatActivity implements AddProvider.OnFragme
             @Override
             public void onClick(View v) {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("name", name);
+                intent.putExtra("name", nameHome);
+                intent.putExtra("last_name", last_nameHome);
+                intent.putExtra("phone", phoneHome);
+                intent.putExtra("email", emailHome);
                 startActivity(intent);
             }
         });
