@@ -12,23 +12,36 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.codemort.minimarket.R;
 import com.codemort.minimarket.helpers.Util;
 import com.codemort.minimarket.helpers.VolleySingleton;
+import com.codemort.minimarket.model.ProductVo;
 import com.codemort.minimarket.ui.activities.AdminRegister;
 import com.codemort.minimarket.ui.activities.Login;
 import android.widget.EditText;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -40,18 +53,32 @@ import java.util.Map;
  * Use the {@link AddProvider#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddProvider extends Fragment implements View.OnClickListener {
+public class AddProvider extends Fragment implements View.OnClickListener, Response.ErrorListener, Response.Listener<JSONObject>, AdapterView.OnItemSelectedListener {
     ProgressDialog progress;
     StringRequest stringRequest;
     //instancias
-    EditText txtCodeProv;
+    EditText txtRucProv;
     EditText txtNameProv;
-    EditText txtLastNameProv;
-    EditText txtProductProv;
+    EditText txtCompanyProv;
+  //  EditText txtLastNameProv;
+   Spinner spinnerProduct; // EditText txtProductProv; //cambiar con spinner
     EditText txtPhoneProv;
     EditText txtEmailProv;
+    EditText txtPassProv;
+
     Button btnRegisterProv;
     ListProviders fragmentListProviders;
+
+    //SPINNER
+    //String[] data = {"Cifrado", "Descifrado"};
+    List<String> listProductString;
+    List<ProductVo> listProductObject;
+    String codProd;
+
+    ProgressDialog progressDialog;
+    RequestQueue requestQueue;
+    JsonObjectRequest jsonObjectRequest;
+    Util util;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -100,17 +127,96 @@ public class AddProvider extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_provider, container, false);
         init(view);
-        //loadRecyclerExpenses(view);
+        listProductString = new ArrayList<String>();
+        listProductObject = new ArrayList<>();
+        requestQueue = Volley.newRequestQueue(getContext());
+        util = new Util();
+        loadProducts();
+
         return view;
     }
 
+    //START LOGIC SPINNER
+
+    private void loadProducts() {
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Cargando...");
+        progressDialog.show();
+
+        String URL = util.getHost() + "/wsJSONListProducts.php";
+
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL,  null, this, this);
+        //requestQueue.add(jsonObjectRequest);
+        VolleySingleton.getIntanciaVolley(getContext()).addToRequestQueue(jsonObjectRequest);
+    }
+
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        Toast.makeText(getContext(), "No se puede conectar. " + error.toString(), Toast.LENGTH_SHORT).show();
+        System.out.println();
+        Log.d("ERROR", error.toString());
+        progressDialog.hide();
+    }
+
+    @Override
+    public void onResponse(JSONObject response) {
+        ProductVo productVo = null;
+        JSONArray json = response.optJSONArray("products");
+
+        try {
+            // assert json != null;
+            for (int i = 0; i < json.length(); i++) {
+                productVo = new ProductVo();
+                JSONObject jsonObject = null;
+                jsonObject = json.getJSONObject(i);
+                productVo.setCodProd(jsonObject.optInt("codProd"));
+                productVo.setNombreProd(jsonObject.optString("nombreProd"));
+
+                listProductObject.add(productVo);
+            }
+            progressDialog.hide();
+            //lisMarketString.add("Seleccione..");
+            for (int i = 0; i < listProductObject.size(); i++) {
+                listProductString.add("" + listProductObject.get(i).getNombreProd());
+            }
+
+            //SPINNER
+            ArrayAdapter adapter = new ArrayAdapter<String>(getContext(), R.layout.item_spinner, listProductString);
+            adapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
+            spinnerProduct.setAdapter(adapter);
+            spinnerProduct.setOnItemSelectedListener(this);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "No se ha podido establecer conexión con el servidor" +
+                    " " + response, Toast.LENGTH_LONG).show();
+            progressDialog.hide();
+        }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        codProd = listProductObject.get(position).getCodProd().toString();
+        Toast.makeText(getContext(), "ID: "+codProd, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    ///END LOGIC SPINNER
+
     private void init(View view) {
-        txtCodeProv = (EditText) view.findViewById(R.id.txtCodeProv);
+        txtRucProv = (EditText) view.findViewById(R.id.txtRucProv);
+        txtCompanyProv = (EditText) view.findViewById(R.id.txtCompanyProv);
         txtNameProv = (EditText) view.findViewById(R.id.txtNameProv);
-        txtLastNameProv = (EditText) view.findViewById(R.id.txtLastNameProv);
-        txtProductProv = (EditText) view.findViewById(R.id.txtProductProv);
+        spinnerProduct = (Spinner) view.findViewById(R.id.spinnerProduct); //txtProductProv = (EditText) view.findViewById(R.id.txtProductProv); //cambiar por spinner
         txtPhoneProv = (EditText) view.findViewById(R.id.txtPhoneProv);
         txtEmailProv = (EditText) view.findViewById(R.id.txtEmailProv);
+        txtPassProv = (EditText) view.findViewById(R.id.txtPassProv);
+
         btnRegisterProv = (Button) view.findViewById(R.id.btnRegisterProv);
 
         fragmentListProviders = new ListProviders();
@@ -129,13 +235,13 @@ public class AddProvider extends Fragment implements View.OnClickListener {
     }
 
     private void validate() {
-        String code = txtCodeProv.getText().toString();
+        String ruc = txtRucProv.getText().toString();
         String name = txtNameProv.getText().toString();
-        String last_name = txtLastNameProv.getText().toString();
-        String product = txtProductProv.getText().toString();
+        String company = txtCompanyProv.getText().toString();
+        //String product = "2";// txtProductProv.getText().toString();
         String phone = txtPhoneProv.getText().toString();
         String email = txtEmailProv.getText().toString();
-        if (name.isEmpty() || last_name.isEmpty() || phone.isEmpty() || email.isEmpty() || code.isEmpty() || product.isEmpty()) {
+        if (name.isEmpty() || company.isEmpty() || phone.isEmpty() || email.isEmpty() || ruc.isEmpty() ) {
             Toast.makeText(getContext(), "Hay campos vacios.", Toast.LENGTH_SHORT).show();
         } else {
             cargarWebService();
@@ -162,12 +268,13 @@ public class AddProvider extends Fragment implements View.OnClickListener {
                 progress.hide();
 
                 if (response.trim().equalsIgnoreCase("registra")) {
-                    txtCodeProv.setText("");
+                    txtRucProv.setText("");
                     txtNameProv.setText("");
-                    txtLastNameProv.setText("");
-                    txtProductProv.setText("");
+                    txtCompanyProv.setText("");
+                    spinnerProduct.setSelection(0);
                     txtPhoneProv.setText("");
                     txtEmailProv.setText("");
+                    txtPassProv.setText("");
                     // photoPlant.setImageResource(R.drawable.not_photo);
                     Toast.makeText(getContext(), "Se ha registrado con exito", Toast.LENGTH_SHORT).show();
 
@@ -191,20 +298,25 @@ public class AddProvider extends Fragment implements View.OnClickListener {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
 
-                String code = txtCodeProv.getText().toString();
+                String ruc = txtRucProv.getText().toString();
                 String name = txtNameProv.getText().toString();
-                String last_name = txtLastNameProv.getText().toString();
-                String product = txtProductProv.getText().toString();
+                String company = txtCompanyProv.getText().toString();
+             //   String product = "2"; //txtProductProv.getText().toString();
                 String phone = txtPhoneProv.getText().toString();
                 String email = txtEmailProv.getText().toString();
                 Map<String, String> parametros = new HashMap<>();
 
-                parametros.put("code_prov", code);
+                //lo de las comillas recibe el post en el api
+                parametros.put("ruc_prov", ruc);
+                parametros.put("company_prov", company);
                 parametros.put("name_prov", name);
-                parametros.put("last_name_prov", last_name);
-                parametros.put("product_prov", product);
-                parametros.put("phone_prov", phone);
                 parametros.put("email_prov", email);
+                parametros.put("pass_prov", email);
+                parametros.put("phone_prov", phone);
+
+                //enviar id de producto cargado en spinner
+                parametros.put("product_id", codProd);
+
 
                 return parametros;
             }
@@ -236,6 +348,7 @@ public class AddProvider extends Fragment implements View.OnClickListener {
         super.onDetach();
         mListener = null;
     }
+
 
 
     /**

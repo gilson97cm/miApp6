@@ -115,12 +115,13 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 if(!response.isEmpty()){
                     try {
                         JSONObject jsonObject = new JSONObject(response);
-                        userVo.setId(jsonObject.optInt("id"));
-                        userVo.setName(jsonObject.getString("name_user"));
-                        userVo.setLast_name(jsonObject.getString("last_name_user"));
-                        userVo.setPhone(jsonObject.getString("phone_user"));
-                        userVo.setEmail(jsonObject.getString("email_user"));
-                        userVo.setPassword(jsonObject.getString("password_user"));
+                        //retorna el json
+                        userVo.setId(jsonObject.optInt("id_admin"));
+                        userVo.setName(jsonObject.getString("nombre_admin"));
+                        userVo.setLast_name(jsonObject.getString("apellido_admin"));
+                        userVo.setPhone(jsonObject.getString("telefono_admin"));
+                        userVo.setEmail(jsonObject.getString("correo_admin"));
+                        userVo.setPassword(jsonObject.getString("contrasena_admin"));
 
                     } catch (JSONException e) {
                         e.printStackTrace();

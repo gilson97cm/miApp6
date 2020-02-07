@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="15dp"
             android:text="Registrar Proveedor"
             android:textAlignment="center"
             android:textSize="17sp"
@@ -30,7 +30,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:padding="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -58,14 +58,14 @@
                             android:orientation="vertical">
 
                             <EditText
-                                android:paddingLeft="15dp"
-                                android:background="@drawable/border_color"
-                                android:id="@+id/txtCodeProv"
+                                android:id="@+id/txtRucProv"
                                 style="@style/Widget.AppCompat.EditText"
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp"
-                                android:hint="Código"
-                                android:inputType="textCapCharacters" />
+                                android:background="@drawable/border_color"
+                                android:hint="RUC"
+                                android:inputType="textCapCharacters"
+                                android:paddingLeft="15dp" />
                         </LinearLayout>
 
                         <View
@@ -94,14 +94,52 @@
                             android:orientation="vertical">
 
                             <EditText
-                                android:paddingLeft="15dp"
+                                android:id="@+id/txtCompanyProv"
+                                style="@style/Widget.AppCompat.EditText"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
                                 android:background="@drawable/border_color"
+                                android:hint="Empresa"
+                                android:inputType="textCapWords"
+                                android:paddingLeft="15dp"
+                                app:passwordToggleEnabled="true" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="1" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="1" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="10"
+
+                            android:orientation="vertical">
+
+                            <EditText
                                 android:id="@+id/txtNameProv"
                                 style="@style/Widget.AppCompat.EditText"
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp"
+                                android:background="@drawable/border_color"
                                 android:hint="Nombre"
                                 android:inputType="textCapWords"
+                                android:paddingLeft="15dp"
                                 app:passwordToggleEnabled="true" />
 
                         </LinearLayout>
@@ -131,54 +169,32 @@
 
                             android:orientation="vertical">
 
-                            <EditText
-                                android:paddingLeft="15dp"
-                                android:background="@drawable/border_color"
-                                android:id="@+id/txtLastNameProv"
-                                style="@style/Widget.AppCompat.EditText"
-                                android:layout_width="match_parent"
-                                android:layout_height="40dp"
-                                android:hint="Apellido"
-                                android:inputType="textCapWords"
-                                app:passwordToggleEnabled="true" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:layout_weight="1" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:orientation="horizontal">
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:layout_weight="1" />
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:layout_weight="10"
-
-                            android:orientation="vertical">
-
-                            <EditText
-                                android:paddingLeft="15dp"
-                                android:background="@drawable/border_color"
+                            <!--EditText
                                 android:id="@+id/txtProductProv"
                                 style="@style/Widget.AppCompat.EditText"
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp"
-                                android:hint="Producto"
+                                android:background="@drawable/border_color"
+                                android:hint="combo de productos"
                                 android:inputType="textCapWords"
-                                app:passwordToggleEnabled="true" />
+                                android:paddingLeft="15dp"
+                                app:passwordToggleEnabled="true" /-->
+                            <Spinner
+                                android:id="@+id/spinnerProduct"
+                                style="@style/Widget.AppCompat.Spinner"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+
+                                android:background="@drawable/spinner_bg"
+                                android:dropDownWidth="300dp"
+                                android:dropDownVerticalOffset="?attr/dropdownListPreferredItemHeight"
+
+                                android:popupBackground="@android:color/white"
+                                android:popupElevation="3dp"
+                                android:stateListAnimator="@drawable/spinner_sla"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
 
                         </LinearLayout>
 
@@ -208,14 +224,14 @@
                             android:orientation="vertical">
 
                             <EditText
-                                android:paddingLeft="15dp"
-                                android:background="@drawable/border_color"
                                 android:id="@+id/txtPhoneProv"
                                 style="@style/Widget.AppCompat.EditText"
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp"
+                                android:background="@drawable/border_color"
                                 android:hint="Teléfono"
-                                android:inputType="number" />
+                                android:inputType="number"
+                                android:paddingLeft="15dp" />
                         </LinearLayout>
 
                         <View
@@ -244,14 +260,14 @@
                             android:orientation="vertical">
 
                             <EditText
-                                android:paddingLeft="15dp"
-                                android:background="@drawable/border_color"
                                 android:id="@+id/txtEmailProv"
                                 style="@style/Widget.AppCompat.EditText"
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp"
+                                android:background="@drawable/border_color"
                                 android:hint="Correo"
                                 android:inputType="textEmailAddress"
+                                android:paddingLeft="15dp"
                                 app:passwordToggleEnabled="true" />
 
                         </LinearLayout>
@@ -262,6 +278,45 @@
                             android:layout_weight="1" />
 
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="1" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="10"
+
+                            android:orientation="vertical">
+
+                            <EditText
+                                android:id="@+id/txtPassProv"
+                                style="@style/Widget.AppCompat.EditText"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:background="@drawable/border_color"
+                                android:hint="Contraseña"
+                                android:inputType="textPassword"
+                                android:paddingLeft="15dp"
+                                app:passwordToggleEnabled="true" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="1" />
+
+                    </LinearLayout>
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
