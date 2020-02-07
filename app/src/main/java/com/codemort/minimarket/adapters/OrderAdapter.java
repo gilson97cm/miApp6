@@ -94,8 +94,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ProviderView
         holder.cardEmailProv.setText(listOrders.get(position).getEmail().toString());*/
       holder.cardOrderId.setText(listOrders.get(position).getId().toString());
      // holder.cardOrderIdProv.setText(listOrders.get(position).getId_prov().toString());
-      holder.cardOrderProv.setText(listOrders.get(position).getName_prov()+" "+listOrders.get(position).getLast_name_prov());
-     // holder.cardOrderLastNameProv.setText(listOrders.get(position).getLast_name_prov().toString());
+      holder.cardOrderProv.setText(listOrders.get(position).getName_prov());
+        holder.cardOrderLastNameProv.setText(listOrders.get(position).getLast_name_prov().toString());
       holder.cardOrderEmail.setText(listOrders.get(position).getEmail_prov().toString());
       holder.cardOrderPhone.setText(listOrders.get(position).getPhone_prov().toString());
       holder.cardOrderProd.setText(listOrders.get(position).getName_product().toString());
@@ -266,7 +266,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ProviderView
             btnDialogSendOrder = (Button) view.findViewById(R.id.btnDialogSendOrder);
 
             txtDialogTitle.setText("Editar Pedido");
-            txtDialogNameProv.setText(cardOrderProv.getText().toString());
+            txtDialogNameProv.setText(cardOrderProv.getText().toString()+" "+cardOrderLastNameProv.getText().toString());
             txtDialogEmailProv.setText(cardOrderEmail.getText().toString());
             txtDialogProductProv.setText(cardOrderProd.getText().toString());
             txtDialogIdProv.setText(cardOrderId.getText().toString());
