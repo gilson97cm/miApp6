@@ -1,30 +1,20 @@
 package com.codemort.minimarket.adapters;
 
-
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.StrictMode;
-import android.provider.MediaStore;
-
-import android.transition.Fade;
 import android.transition.Transition;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.ActivityOptionsCompat;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
@@ -37,7 +27,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.codemort.minimarket.R;
 import com.codemort.minimarket.helpers.Util;
 import com.codemort.minimarket.helpers.VolleySingleton;
-import com.codemort.minimarket.model.ProviderVo;
+import com.codemort.minimarket.model.OrderVo;
+import com.codemort.minimarket.ui.activities.MyOrders;
 import com.codemort.minimarket.ui.activities.Providers;
 import android.widget.EditText;
 
@@ -54,10 +45,10 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.ProviderViewHolder> {
+public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ProviderViewHolder> {
     Transition transition;
     private static final long DURATION_TRANSITION = 1000;
-    List<ProviderVo> listProviders;
+    List<OrderVo> listOrders;
 
     Context context;
     ProgressDialog progress;
@@ -65,6 +56,7 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
     StringRequest stringRequest;//SE MODIFICA
 
     EditText txtDialogCant;
+    TextView txtDialogTitle;
     TextView txtDialogIdProv;
     TextView txtDialogNameProv;
     TextView txtDialogEmailProv;
@@ -72,18 +64,19 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
     Button btnDialogCancel;
     Button btnDialogSendOrder;
 
+
     //enviar email
     String your_email;
     String your_pass;
 
-    public ProviderAdapter(Context context, List<ProviderVo> listProviders) {
-        this.listProviders = listProviders;
+    public OrderAdapter(Context context, List<OrderVo> listOrders) {
+        this.listOrders = listOrders;
         this.context = context;
     }
 
     @Override
     public ProviderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View vista = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_provider, parent, false);
+        View vista = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_orders, parent, false);
         RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         vista.setLayoutParams(layoutParams);
@@ -92,39 +85,59 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
 
     @Override
     public void onBindViewHolder(ProviderViewHolder holder, int position) {
-        holder.cardIdProv.setText(listProviders.get(position).getId().toString());
-        holder.cardCodeProv.setText(listProviders.get(position).getCode().toString());
-        holder.cardNameProv.setText(listProviders.get(position).getName().toString());
-        holder.cardLastNameProv.setText(listProviders.get(position).getLast_name().toString());
-        holder.cardProductProv.setText(listProviders.get(position).getProduct().toString());
-        holder.cardPhoneProv.setText(listProviders.get(position).getPhone().toString());
-        holder.cardEmailProv.setText(listProviders.get(position).getEmail().toString());
+      /*  holder.cardIdProv.setText(listOrders.get(position).getId().toString());
+        holder.cardCodeProv.setText(listOrders.get(position).getCode().toString());
+        holder.cardNameProv.setText(listOrders.get(position).getName().toString());
+        holder.cardLastNameProv.setText(listOrders.get(position).getLast_name().toString());
+        holder.cardProductProv.setText(listOrders.get(position).getProduct().toString());
+        holder.cardPhoneProv.setText(listOrders.get(position).getPhone().toString());
+        holder.cardEmailProv.setText(listOrders.get(position).getEmail().toString());*/
+      holder.cardOrderId.setText(listOrders.get(position).getId().toString());
+     // holder.cardOrderIdProv.setText(listOrders.get(position).getId_prov().toString());
+      holder.cardOrderProv.setText(listOrders.get(position).getName_prov()+" "+listOrders.get(position).getLast_name_prov());
+     // holder.cardOrderLastNameProv.setText(listOrders.get(position).getLast_name_prov().toString());
+      holder.cardOrderEmail.setText(listOrders.get(position).getEmail_prov().toString());
+      holder.cardOrderPhone.setText(listOrders.get(position).getPhone_prov().toString());
+      holder.cardOrderProd.setText(listOrders.get(position).getName_product().toString());
+      holder.cardOrderCant.setText(listOrders.get(position).getCant_product().toString());
+      holder.cardOrderDate.setText(listOrders.get(position).getDate_order().toString());
 
         holder.setOnClickListeners();
     }
 
     @Override
     public int getItemCount() {
-        return listProviders.size();
+        return listOrders.size();
     }
 
     public class ProviderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // Context context;
 
-        TextView cardIdProv;
-        TextView cardCodeProv;
-        TextView cardNameProv;
-        TextView cardLastNameProv;
-        TextView cardProductProv;
-        TextView cardPhoneProv;
-        TextView cardEmailProv;
+        /* TextView cardIdProv;
+         TextView cardCodeProv;
+         TextView cardNameProv;
+         TextView cardLastNameProv;
+         TextView cardProductProv;
+         TextView cardPhoneProv;
+         TextView cardEmailProv;
 
-        Button btnCardMakeOrder;
-        Button btnCardDestroyProv;
+         Button btnCardMakeOrder;
+         Button btnCardDestroyProv;*/
+        TextView cardOrderId;
+      //  TextView cardOrderIdProv;
+        TextView cardOrderProv;
+        TextView cardOrderLastNameProv;
+        TextView cardOrderEmail;
+        TextView cardOrderPhone;
+        TextView cardOrderProd;
+        TextView cardOrderCant;
+        TextView cardOrderDate;
+        Button btnCardEditOrder;
+        Button btnCardOrderDestroy;
 
         public ProviderViewHolder(View itemView) {
             super(itemView);
-            cardIdProv = (TextView) itemView.findViewById(R.id.cardIdProv);
+          /*  cardIdProv = (TextView) itemView.findViewById(R.id.cardIdProv);
             cardCodeProv = (TextView) itemView.findViewById(R.id.cardCodeProv);
             cardNameProv = (TextView) itemView.findViewById(R.id.cardNameProv);
             cardLastNameProv = (TextView) itemView.findViewById(R.id.cardLastNameProv);
@@ -133,32 +146,45 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
             cardEmailProv = (TextView) itemView.findViewById(R.id.cardEmailProv);
 
             btnCardMakeOrder = (Button) itemView.findViewById(R.id.btnCardMakeOrder);
-            btnCardDestroyProv = (Button) itemView.findViewById(R.id.btnCardDestroyProv);
+            btnCardDestroyProv = (Button) itemView.findViewById(R.id.btnCardDestroyProv);*/
+            cardOrderId = (TextView) itemView.findViewById(R.id.cardOrderId);
+          //  cardOrderIdProv = (TextView) itemView.findViewById(R.id.cardOrderIdProv);
+            cardOrderProv = (TextView) itemView.findViewById(R.id.cardOrderProv); //nombre del proveedor
+            cardOrderLastNameProv = (TextView) itemView.findViewById(R.id.cardOrderLastNameProv); //apellido del proveedor
+            cardOrderEmail = (TextView) itemView.findViewById(R.id.cardOrderEmail);
+            cardOrderPhone = (TextView) itemView.findViewById(R.id.cardOrderPhone);
+            cardOrderProd = (TextView) itemView.findViewById(R.id.cardOrderProd);
+            cardOrderCant = (TextView) itemView.findViewById(R.id.cardOrderCant);
+            cardOrderDate = (TextView) itemView.findViewById(R.id.cardOrderDate);
+            btnCardEditOrder = (Button) itemView.findViewById(R.id.btnCardEditOrder);
+            btnCardOrderDestroy = (Button) itemView.findViewById(R.id.btnCardOrderDestroy);
 
 
         }
 
         void setOnClickListeners() {
-            btnCardMakeOrder.setOnClickListener(this);
-            btnCardDestroyProv.setOnClickListener(this);
+          /*  btnCardMakeOrder.setOnClickListener(this);
+            btnCardDestroyProv.setOnClickListener(this);*/
+            btnCardEditOrder.setOnClickListener(this);
+            btnCardOrderDestroy.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.btnCardMakeOrder:
+                case R.id.btnCardEditOrder:
                     dialogOrder();
                     // Toast.makeText(context, "Realizar orden", Toast.LENGTH_SHORT).show();
                     break;
-                case R.id.btnCardDestroyProv:
+                case R.id.btnCardOrderDestroy:
                     //  Toast.makeText(context, "Eliminar", Toast.LENGTH_SHORT).show();
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setMessage("¿Eliminar Proveedor?");
+                    builder.setMessage("¿Cancelar Pedido?");
                     builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String id = cardIdProv.getText().toString();
+                            String id = cardOrderId.getText().toString();
                             // Toast.makeText(context, "id: "+id, Toast.LENGTH_SHORT).show();
                             webServiceDelete(id);
                         }
@@ -177,12 +203,12 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
         //eliminar proveedor
         private void webServiceDelete(String id) {
             progress = new ProgressDialog(context);
-            progress.setMessage("Eliminando...");
+            progress.setMessage("Cancelando...");
             progress.show();
 
             Util util = new Util();
 
-            String URL = util.getHost() + "wsJSONDeleteProvider.php?id=" + id;
+            String URL = util.getHost() + "wsJSONDeleteOrder.php?id=" + id;
             stringRequest = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -190,14 +216,15 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
 
                     if (response.trim().equalsIgnoreCase("elimina")) {
                         //volver a llamar al fragmento
-                        Intent intent = new Intent(context, Providers.class);
+                       // sendMailDelete();
+                        Intent intent = new Intent(context, MyOrders.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.putExtra("name", cardNameProv.getText().toString());
-                        intent.putExtra("last_name", cardLastNameProv.getText().toString());
-                        intent.putExtra("phone", cardPhoneProv.getText().toString());
-                        intent.putExtra("email", cardEmailProv.getText().toString());
+                        intent.putExtra("name", cardOrderProv.getText().toString());
+                        intent.putExtra("last_name", cardOrderLastNameProv.getText().toString());
+                        intent.putExtra("phone", cardOrderPhone.getText().toString());
+                        intent.putExtra("email", cardOrderEmail.getText().toString());
                         context.startActivity(intent);
-                        Toast.makeText(context, "Se ha eliminado con exito", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Se ha cancelado con exito", Toast.LENGTH_SHORT).show();
                     } else {
                         if (response.trim().equalsIgnoreCase("noExiste")) {
                             Toast.makeText(context, "No se encuentra el proveedor ", Toast.LENGTH_SHORT).show();
@@ -229,6 +256,7 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
             builder.setView(view);
             final AlertDialog dialog = builder.create();
             dialog.show();
+            txtDialogTitle = (TextView) view.findViewById(R.id.txtDialogTitle);
             txtDialogCant = (EditText) view.findViewById(R.id.txtDialogCant);
             txtDialogIdProv = (TextView) view.findViewById(R.id.txtDialogIdProv);
             txtDialogNameProv = (TextView) view.findViewById(R.id.txtDialogNameProv);
@@ -237,10 +265,11 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
             btnDialogCancel = (Button) view.findViewById(R.id.btnDialogCancel);
             btnDialogSendOrder = (Button) view.findViewById(R.id.btnDialogSendOrder);
 
-            txtDialogNameProv.setText(cardNameProv.getText().toString() + " " + cardLastNameProv.getText().toString());
-            txtDialogEmailProv.setText(cardEmailProv.getText().toString());
-            txtDialogProductProv.setText(cardProductProv.getText().toString());
-            txtDialogIdProv.setText(cardIdProv.getText().toString());
+            txtDialogTitle.setText("Editar Pedido");
+            txtDialogNameProv.setText(cardOrderProv.getText().toString());
+            txtDialogEmailProv.setText(cardOrderEmail.getText().toString());
+            txtDialogProductProv.setText(cardOrderProd.getText().toString());
+            txtDialogIdProv.setText(cardOrderId.getText().toString());
 
 
             btnDialogSendOrder.setOnClickListener(new View.OnClickListener() {
@@ -281,7 +310,7 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
             //  String ip=getString(R.string.ip);
             Util util = new Util();
 
-            String URL = util.getHost() + "wsJSONRegisterOrders.php";
+            String URL = util.getHost() + "wsJSONUpdateOrders.php";
 
             //  String url=ip+"/ejemploBDRemota/wsJSONRegistroMovil.php?";
 
@@ -291,14 +320,21 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
                 public void onResponse(String response) {
                     progress.hide();
 
-                    if (response.trim().equalsIgnoreCase("registra")) {
+                    if (response.trim().equalsIgnoreCase("actualiza")) {
                         //txtDialogCant.setText("");
-                        sendMail();
+                        sendMailUpdate();
+                        Intent intent = new Intent(context, MyOrders.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.putExtra("name", cardOrderProv.getText().toString());
+                        intent.putExtra("last_name", cardOrderLastNameProv.getText().toString());
+                        intent.putExtra("phone", cardOrderPhone.getText().toString());
+                        intent.putExtra("email", cardOrderEmail.getText().toString());
+                        context.startActivity(intent);
                         // photoPlant.setImageResource(R.drawable.not_photo);
-                        Toast.makeText(context, "Se ha enviado con exito", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Se ha enviado actualizacion con exito", Toast.LENGTH_SHORT).show();
 
                     } else {
-                        Toast.makeText(context, "No se ha registrado ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "No se ha actualizado ", Toast.LENGTH_SHORT).show();
                         Log.i("RESPUESTA: ", "" + response);
                     }
 
@@ -313,14 +349,13 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
 
-                    String name_product = txtDialogProductProv.getText().toString();
+                    String id = txtDialogIdProv.getText().toString();  //para no crear otro text view en este dialogo se agrega el id de la orden en txtDialogProductProv
                     String cant_product = txtDialogCant.getText().toString();
-                    String prov_id = txtDialogIdProv.getText().toString();
                     Map<String, String> parametros = new HashMap<>();
 
-                    parametros.put("name_product", name_product);
+                    parametros.put("id", id);
                     parametros.put("cant_product", cant_product);
-                    parametros.put("prov_id", prov_id);
+
 
                     return parametros;
                 }
@@ -329,7 +364,7 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
             VolleySingleton.getIntanciaVolley(context).addToRequestQueue(stringRequest);
         }
 
-        private void sendMail() {
+        private void sendMailUpdate() {
             your_email = "elizabethminimarket@gmail.com";
             your_pass = "doris_saquinga";
             Session session = null;
@@ -355,14 +390,15 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
                 if (session != null) {
                     Message message = new MimeMessage(session);
                     message.setFrom(new InternetAddress(your_email));
-                    message.setSubject("Pedido Minimarket");
+                    message.setSubject("CAMBIO - en el Pedido Minimarket");
                     message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(txtDialogEmailProv.getText().toString()));
                     message.setContent("<h4><strong>MINIMARKET ELIZABETH</strong><h4> <br>" +
-                            "<hr>"+
-                            "<strong>Detalle de pedido:</strong><br>" +
-                            "<hr>"+
-                            "PRODUCTO: <strong>"+txtDialogProductProv.getText().toString()+"</strong><br>"+
-                            "CANTIDAD: <strong>"+txtDialogCant.getText().toString()+"</strong>", "text/html; charset=utf-8");
+                            "<hr>" +
+                            "<strong>Solicitud de CAMBIO en el pedido:</strong><br>" +
+                            "<strong>Detalle de pedido ACTUALIZADO:</strong><br>" +
+                            "<hr>" +
+                            "PRODUCTO: <strong>" + txtDialogProductProv.getText().toString() + "</strong><br>" +
+                            "CANTIDAD: <strong>" + txtDialogCant.getText().toString() + "</strong>", "text/html; charset=utf-8");
                     Transport.send(message);
                 }
             } catch (Exception e) {
@@ -371,6 +407,50 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
 
 
         }
+     /*   private void sendMailDelete(String email) {
+            your_email = "elizabethminimarket@gmail.com";
+            your_pass = "doris_saquinga";
+            Session session = null;
+
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            Properties properties = new Properties();
+            properties.put("mail.smtp.host", "smtp.googlemail.com");
+            properties.put("mail.smtp.socketFactory.port", "465");
+            properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+            properties.put("mail.smtp.auth", "true");
+            properties.put("mail.smtp.port", "465");
+
+            try {
+                session = Session.getDefaultInstance(properties, new Authenticator() {
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(your_email, your_pass);
+                    }
+                });
+
+                if (session != null) {
+                    Message message = new MimeMessage(session);
+                    message.setFrom(new InternetAddress(your_email));
+                    message.setSubject("CANCELAR - Pedido Minimarket");
+                    message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
+                    message.setContent("<h4><strong>MINIMARKET ELIZABETH</strong><h4> <br>" +
+                            "<hr>" +
+                            "<strong>Solicitud de CANCELACIÓN en el pedido:</strong><br>" +
+                            "<strong>Detalle de pedido cancelado:</strong><br>" +
+                            "<hr>" +
+                            "PRODUCTO: <strong>" + txtDialogProductProv.getText().toString() + "</strong><br>" +
+                            "CANTIDAD: <strong>" + txtDialogCant.getText().toString() + "</strong>", "text/html; charset=utf-8");
+                    Transport.send(message);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }*/
 
     }
 }
+
