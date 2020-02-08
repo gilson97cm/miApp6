@@ -44,14 +44,14 @@
                             android:text="prov001"
                             android:textSize="13sp" />
                         <TextView
-                            android:id="@+id/cardCodeProv"
+                            android:id="@+id/cardRucProv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="prov001"
-                            android:textSize="13sp" />
+                            android:textSize="12sp" />
 
                         <TextView
-                            android:id="@+id/cardNameProv"
+                            android:id="@+id/cardCompanyProv"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="codemort name"
@@ -60,13 +60,12 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/cardLastNameProv"
+                            android:id="@+id/cardNameProv"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="codemort lastname"
                             android:textAlignment="center"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
+                            android:textSize="16sp" />
 
 
                         <View
@@ -88,7 +87,7 @@
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/cardProductProv"
+                                android:id="@+id/cardProductNameProv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="3"
@@ -155,12 +154,12 @@
                     android:padding="0dp">
 
                     <Button
-                        android:id="@+id/btnCardMakeOrder"
+                        android:id="@+id/btnCardUpdateProv"
                         style="@style/Widget.AppCompat.Button.Borderless.Colored"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Pedir" />
+                        android:text="Editar" />
 
                     <View
                         android:layout_width="2dp"

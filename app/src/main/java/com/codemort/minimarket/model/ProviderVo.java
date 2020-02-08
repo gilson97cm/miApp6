@@ -2,9 +2,9 @@ package com.codemort.minimarket.model;
 
 public class ProviderVo {
     Integer id;
-    String code;
+    String ruc;
     String name;
-    String last_name;
+    String company;
     String product;
     String phone;
     String email;
@@ -17,12 +17,12 @@ public class ProviderVo {
         this.id = id;
     }
 
-    public String getCode() {
-        return code;
+    public String getRuc() {
+        return ruc;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setRuc(String ruc) {
+        this.ruc = ruc;
     }
 
     public String getName() {
@@ -33,12 +33,12 @@ public class ProviderVo {
         this.name = name;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getCompany() {
+        return company;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     public String getProduct() {

@@ -13,16 +13,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.codemort.minimarket.R;
 import com.codemort.minimarket.adapters.ProviderAdapter;
 import com.codemort.minimarket.helpers.Util;
 import com.codemort.minimarket.helpers.VolleySingleton;
+import com.codemort.minimarket.model.ProductVo;
 import com.codemort.minimarket.model.ProviderVo;
 
 import org.json.JSONArray;
@@ -30,6 +36,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -147,13 +154,13 @@ public class ListProviders extends Fragment implements Response.Listener<JSONObj
                 JSONObject jsonObject = null;
                 jsonObject = json.getJSONObject(i);
 
-                provider.setId(jsonObject.optInt("id"));
-                provider.setCode(jsonObject.optString("code_prov"));
-                provider.setName(jsonObject.optString("name_prov"));
-                provider.setLast_name(jsonObject.optString("last_name_prov"));
-                provider.setProduct(jsonObject.optString("product_prov"));
-                provider.setPhone(jsonObject.optString("phone_prov"));
-                provider.setEmail(jsonObject.optString("email_prov"));
+                provider.setId(jsonObject.optInt("id_prove"));
+                provider.setRuc(jsonObject.optString("ruc_prove"));
+                provider.setCompany(jsonObject.optString("empresaprov"));
+                provider.setName(jsonObject.optString("nombre_prove"));
+                provider.setEmail(jsonObject.optString("correo_prove"));
+                provider.setPhone(jsonObject.optString("telefono_prove"));
+                provider.setProduct(jsonObject.optString("nombreProd"));
 
                 listProviders.add(provider);
             }
@@ -213,4 +220,5 @@ public class ListProviders extends Fragment implements Response.Listener<JSONObj
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }

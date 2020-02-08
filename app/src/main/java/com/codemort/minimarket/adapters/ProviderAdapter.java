@@ -18,7 +18,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,17 +33,26 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.codemort.minimarket.R;
 import com.codemort.minimarket.helpers.Util;
 import com.codemort.minimarket.helpers.VolleySingleton;
+import com.codemort.minimarket.model.ProductVo;
 import com.codemort.minimarket.model.ProviderVo;
 import com.codemort.minimarket.ui.activities.Providers;
+
 import android.widget.EditText;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,17 +76,27 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
     JsonObjectRequest jsonObjectRequest;
     StringRequest stringRequest;//SE MODIFICA
 
-    EditText txtDialogCant;
-    TextView txtDialogIdProv;
+    //EditText txtDialogCant;
+    //TextView txtDialogIdProv;
     TextView txtDialogNameProv;
     TextView txtDialogEmailProv;
-    TextView txtDialogProductProv;
-    Button btnDialogCancel;
-    Button btnDialogSendOrder;
+    //TextView txtDialogProductNameProv;
+    Button btnDialogCancelEdit;
+    Button btnDialogUpdate;
 
     //enviar email
     String your_email;
     String your_pass;
+
+    //SPINNER
+    //String[] data = {"Cifrado", "Descifrado"};
+    List<String> listProductString;
+    List<ProductVo> listProductObject;
+    RequestQueue requestQueue;
+    Spinner spinnerProductEdit;
+   // JsonObjectRequest jsonObjectRequest;
+    Util util;
+
 
     public ProviderAdapter(Context context, List<ProviderVo> listProviders) {
         this.listProviders = listProviders;
@@ -93,10 +115,10 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
     @Override
     public void onBindViewHolder(ProviderViewHolder holder, int position) {
         holder.cardIdProv.setText(listProviders.get(position).getId().toString());
-        holder.cardCodeProv.setText(listProviders.get(position).getCode().toString());
+        holder.cardRucProv.setText(listProviders.get(position).getRuc().toString());
         holder.cardNameProv.setText(listProviders.get(position).getName().toString());
-        holder.cardLastNameProv.setText(listProviders.get(position).getLast_name().toString());
-        holder.cardProductProv.setText(listProviders.get(position).getProduct().toString());
+        holder.cardCompanyProv.setText(listProviders.get(position).getCompany().toString());
+        holder.cardProductNameProv.setText(listProviders.get(position).getProduct().toString());
         holder.cardPhoneProv.setText(listProviders.get(position).getPhone().toString());
         holder.cardEmailProv.setText(listProviders.get(position).getEmail().toString());
 
@@ -108,46 +130,54 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
         return listProviders.size();
     }
 
-    public class ProviderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ProviderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, Response.Listener<JSONObject>, Response.ErrorListener {
         // Context context;
 
         TextView cardIdProv;
-        TextView cardCodeProv;
+        TextView cardRucProv;
+        TextView cardCompanyProv;
         TextView cardNameProv;
-        TextView cardLastNameProv;
-        TextView cardProductProv;
+        TextView cardProductNameProv;
         TextView cardPhoneProv;
         TextView cardEmailProv;
 
-        Button btnCardMakeOrder;
+        Button btnCardUpdateProv;
         Button btnCardDestroyProv;
 
         public ProviderViewHolder(View itemView) {
             super(itemView);
             cardIdProv = (TextView) itemView.findViewById(R.id.cardIdProv);
-            cardCodeProv = (TextView) itemView.findViewById(R.id.cardCodeProv);
+            cardRucProv = (TextView) itemView.findViewById(R.id.cardRucProv);
             cardNameProv = (TextView) itemView.findViewById(R.id.cardNameProv);
-            cardLastNameProv = (TextView) itemView.findViewById(R.id.cardLastNameProv);
-            cardProductProv = (TextView) itemView.findViewById(R.id.cardProductProv);
+            cardCompanyProv = (TextView) itemView.findViewById(R.id.cardCompanyProv);
+            cardProductNameProv = (TextView) itemView.findViewById(R.id.cardProductNameProv);
             cardPhoneProv = (TextView) itemView.findViewById(R.id.cardPhoneProv);
             cardEmailProv = (TextView) itemView.findViewById(R.id.cardEmailProv);
 
-            btnCardMakeOrder = (Button) itemView.findViewById(R.id.btnCardMakeOrder);
+            btnCardUpdateProv = (Button) itemView.findViewById(R.id.btnCardUpdateProv);
             btnCardDestroyProv = (Button) itemView.findViewById(R.id.btnCardDestroyProv);
+
+
+
+            listProductString = new ArrayList<String>();
+            listProductObject = new ArrayList<>();
+            requestQueue = Volley.newRequestQueue(context);
+            util = new Util();
+          //  loadProducts();
 
 
         }
 
         void setOnClickListeners() {
-            btnCardMakeOrder.setOnClickListener(this);
+            btnCardUpdateProv.setOnClickListener(this);
             btnCardDestroyProv.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.btnCardMakeOrder:
-                    dialogOrder();
+                case R.id.btnCardUpdateProv:
+                    dialogUpdate();
                     // Toast.makeText(context, "Realizar orden", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.btnCardDestroyProv:
@@ -193,7 +223,7 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
                         Intent intent = new Intent(context, Providers.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtra("name", cardNameProv.getText().toString());
-                        intent.putExtra("last_name", cardLastNameProv.getText().toString());
+                        //intent.putExtra("last_name", cardLastNameProv.getText().toString());
                         intent.putExtra("phone", cardPhoneProv.getText().toString());
                         intent.putExtra("email", cardEmailProv.getText().toString());
                         context.startActivity(intent);
@@ -221,8 +251,56 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
             VolleySingleton.getIntanciaVolley(context).addToRequestQueue(stringRequest);
         }
 
+        //dialogo para editar
+
+        private void dialogUpdate() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.dialog_edit_provider, null);
+            builder.setView(view);
+            final AlertDialog dialog = builder.create();
+            dialog.show();
+            spinnerProductEdit = (Spinner) view.findViewById(R.id.spinnerProductEdit);
+            loadProducts();
+
+            //  spinnerProduct = (Spinner) view.findViewById(R.id.spinnerProductEdit);
+
+          /*
+            loadProducts();*/
+
+         /*   txtDialogCant = (EditText) view.findViewById(R.id.txtDialogCant);
+            txtDialogIdProv = (TextView) view.findViewById(R.id.txtDialogIdProv);
+            txtDialogNameProv = (TextView) view.findViewById(R.id.txtDialogNameProv);
+            txtDialogEmailProv = (TextView) view.findViewById(R.id.txtDialogEmailProv);
+            txtDialogProductNameProv = (TextView) view.findViewById(R.id.txtDialogProductProv);
+            btnDialogCancel = (Button) view.findViewById(R.id.btnDialogCancel);
+            btnDialogSendOrder = (Button) view.findViewById(R.id.btnDialogSendOrder);
+
+            txtDialogNameProv.setText(cardNameProv.getText().toString());
+            txtDialogEmailProv.setText(cardEmailProv.getText().toString());
+            txtDialogProductNameProv.setText(cardProductNameProv.getText().toString());
+            txtDialogIdProv.setText(cardIdProv.getText().toString());*/
+
+
+          /*  btnDialogUpdate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                  //  validate();
+                    //Toast.makeText(context, "Enviando...", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+            });
+            btnDialogCancelEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Toast.makeText(context,"Enviando...",Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+            });*/
+        }
+
         //dialogo para el ingreso de la cantidad
-        private void dialogOrder() {
+       /* private void dialogOrder() {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.dialog_insert_cant, null);
@@ -233,13 +311,13 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
             txtDialogIdProv = (TextView) view.findViewById(R.id.txtDialogIdProv);
             txtDialogNameProv = (TextView) view.findViewById(R.id.txtDialogNameProv);
             txtDialogEmailProv = (TextView) view.findViewById(R.id.txtDialogEmailProv);
-            txtDialogProductProv = (TextView) view.findViewById(R.id.txtDialogProductProv);
+            txtDialogProductNameProv = (TextView) view.findViewById(R.id.txtDialogProductProv);
             btnDialogCancel = (Button) view.findViewById(R.id.btnDialogCancel);
             btnDialogSendOrder = (Button) view.findViewById(R.id.btnDialogSendOrder);
 
-            txtDialogNameProv.setText(cardNameProv.getText().toString() + " " + cardLastNameProv.getText().toString());
+            txtDialogNameProv.setText(cardNameProv.getText().toString());
             txtDialogEmailProv.setText(cardEmailProv.getText().toString());
-            txtDialogProductProv.setText(cardProductProv.getText().toString());
+            txtDialogProductNameProv.setText(cardProductNameProv.getText().toString());
             txtDialogIdProv.setText(cardIdProv.getText().toString());
 
 
@@ -258,21 +336,21 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
                     dialog.dismiss();
                 }
             });
-        }
+        }*/
 
         //enviar y registrar pedido
         private void validate() {
-            String name_product = txtDialogProductProv.getText().toString();
-            String cant_product = txtDialogCant.getText().toString();
-            String prov_id = txtDialogIdProv.getText().toString();
-            if (name_product.isEmpty() || cant_product.isEmpty() || prov_id.isEmpty()) {
+            //  String name_product = txtDialogProductNameProv.getText().toString();
+            //    String cant_product = txtDialogCant.getText().toString();
+         /*   String prov_id = txtDialogIdProv.getText().toString();
+            if (name_product.isEmpty() || prov_id.isEmpty()) {
                 Toast.makeText(context, "Hay campos vacios.", Toast.LENGTH_SHORT).show();
             } else {
                 cargarWebService();
-            }
+            }*/
         }
 
-        private void cargarWebService() {
+      /*  private void cargarWebService() {
 
             progress = new ProgressDialog(context);
             progress.setMessage("Enviando...");
@@ -293,9 +371,9 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
 
                     if (response.trim().equalsIgnoreCase("registra")) {
                         //txtDialogCant.setText("");
-                        sendMail();
+                        //  sendMail();
                         // photoPlant.setImageResource(R.drawable.not_photo);
-                        Toast.makeText(context, "Se ha enviado con exito", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Se ha Actualizado con exito", Toast.LENGTH_SHORT).show();
 
                     } else {
                         Toast.makeText(context, "No se ha registrado ", Toast.LENGTH_SHORT).show();
@@ -313,23 +391,41 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
 
-                    String name_product = txtDialogProductProv.getText().toString();
-                    String cant_product = txtDialogCant.getText().toString();
-                    String prov_id = txtDialogIdProv.getText().toString();
+                    // String name_product = txtDialogProductNameProv.getText().toString();
+                    //  String cant_product = txtDialogCant.getText().toString();
+                    //  String prov_id = txtDialogIdProv.getText().toString();
                     Map<String, String> parametros = new HashMap<>();
 
-                    parametros.put("name_product", name_product);
-                    parametros.put("cant_product", cant_product);
-                    parametros.put("prov_id", prov_id);
+                    // parametros.put("name_product", name_product);
+                    // parametros.put("cant_product", cant_product);
+                    // parametros.put("prov_id", prov_id);
 
                     return parametros;
                 }
             };
             stringRequest.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 2, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             VolleySingleton.getIntanciaVolley(context).addToRequestQueue(stringRequest);
+        }*/
+
+        //START LOGIC SPINNER
+
+       private void loadProducts() {
+            progress = new ProgressDialog(context);
+            progress.setMessage("Cargando...");
+            progress.show();
+
+            String URL = util.getHost() + "/wsJSONListProducts.php";
+
+            jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, this, this);
+            //requestQueue.add(jsonObjectRequest);
+
+            VolleySingleton.getIntanciaVolley(context).addToRequestQueue(jsonObjectRequest);
         }
 
-        private void sendMail() {
+
+        ///END LOGIC SPINNER
+
+      /*  private void sendMail() {
             your_email = "elizabethminimarket@gmail.com";
             your_pass = "doris_saquinga";
             Session session = null;
@@ -361,7 +457,7 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
                             "<hr>"+
                             "<strong>Detalle de pedido:</strong><br>" +
                             "<hr>"+
-                            "PRODUCTO: <strong>"+txtDialogProductProv.getText().toString()+"</strong><br>"+
+                            "PRODUCTO: <strong>"+txtDialogProductNameProv.getText().toString()+"</strong><br>"+
                             "CANTIDAD: <strong>"+txtDialogCant.getText().toString()+"</strong>", "text/html; charset=utf-8");
                     Transport.send(message);
                 }
@@ -369,8 +465,61 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
                 e.printStackTrace();
             }
 
+        }*/
 
+       @Override
+        public void onErrorResponse(VolleyError error) {
+            Toast.makeText(context, "Sin Datos.", Toast.LENGTH_LONG).show();
+            System.out.println();
+            Log.d("ERROR: ", error.toString());
+            progress.hide();
         }
 
+
+        @Override
+        public void onResponse(JSONObject response) {
+            ProductVo productVo = null;
+            JSONArray json = response.optJSONArray("products");
+
+            try {
+                // assert json != null;
+                for (int i = 0; i < json.length(); i++) {
+                    productVo = new ProductVo();
+                    JSONObject jsonObject = null;
+                    jsonObject = json.getJSONObject(i);
+                    productVo.setCodProd(jsonObject.optInt("codProd"));
+                    productVo.setNombreProd(jsonObject.optString("nombreProd"));
+
+                    listProductObject.add(productVo);
+                }
+                progress.hide();
+                //lisMarketString.add("Seleccione..");
+                for (int i = 0; i < listProductObject.size(); i++) {
+                    listProductString.add("" + listProductObject.get(i).getNombreProd());
+                }
+
+                //SPINNER
+                ArrayAdapter adapter = new ArrayAdapter<String>(context, R.layout.item_spinner, listProductString);
+                adapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
+                spinnerProductEdit.setAdapter(adapter);
+                spinnerProductEdit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(context, "No se ha podido establecer conexión con el servidor" +
+                        " " + response, Toast.LENGTH_LONG).show();
+                progress.hide();
+            }
+        }
     }
 }
