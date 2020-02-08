@@ -5,194 +5,193 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/txtDialogTitle"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@color/colorPrimary"
-            android:gravity="center|top"
-            android:text="Editar Proveedor"
-            android:textColor="@color/md_white_1000"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/txtDialogIdProv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:visibility="gone" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/txtDialogEditProvRuc"
-                style="@style/Widget.AppCompat.EditText"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@drawable/border_color"
-                android:hint="RUC"
-                android:inputType="number"
-                android:maxLength="3"
-                android:paddingLeft="15dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/txtDialogEditProvCompany"
-                style="@style/Widget.AppCompat.EditText"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@drawable/border_color"
-                android:hint="Empresa"
-                android:inputType="textCapWords"
-                android:maxLength="3"
-                android:paddingLeft="15dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/txtDialogEditProvName"
-                style="@style/Widget.AppCompat.EditText"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@drawable/border_color"
-                android:hint="Nombre"
-                android:inputType="textCapWords"
-                android:maxLength="3"
-                android:paddingLeft="15dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:orientation="vertical">
-
-            <Spinner
-                android:id="@+id/spinnerProductEdit"
-                style="@style/Widget.AppCompat.Spinner"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/spinner_bg"
-                android:dropDownWidth="300dp"
-                android:dropDownVerticalOffset="?attr/dropdownListPreferredItemHeight"
-                android:popupBackground="@android:color/white"
-                android:popupElevation="3dp"
-                android:stateListAnimator="@drawable/spinner_sla"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/txtDialogEditProvPhone"
-                style="@style/Widget.AppCompat.EditText"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@drawable/border_color"
-                android:hint="Teléfono"
-                android:inputType="number"
-                android:maxLength="3"
-                android:paddingLeft="15dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/txtDialogEditProvEmail"
-                style="@style/Widget.AppCompat.EditText"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@drawable/border_color"
-                android:hint="Correo"
-                android:inputType="textEmailAddress"
-                android:maxLength="3"
-                android:paddingLeft="15dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/txtDialogEditProvPass"
-                style="@style/Widget.AppCompat.EditText"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@drawable/border_color"
-                android:hint="Contraseña"
-                android:inputType="textPassword"
-                android:maxLength="3"
-                android:paddingLeft="15dp" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/md_grey_50" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="0dp">
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btnDialogCancelEdit"
-                style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/txtDialogTitle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Cancelar" />
+                android:layout_margin="5dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center|top"
+                android:text="Editar Proveedor"
+                android:textColor="@color/md_white_1000"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtDialogIdProv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/txtDialogEditProvRuc"
+                    style="@style/Widget.AppCompat.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/border_color"
+                    android:hint="RUC"
+                    android:inputType="number"
+                    android:paddingLeft="15dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/txtDialogEditProvCompany"
+                    style="@style/Widget.AppCompat.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/border_color"
+                    android:hint="Empresa"
+                    android:inputType="textCapWords"
+                    android:paddingLeft="15dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/txtDialogEditProvName"
+                    style="@style/Widget.AppCompat.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/border_color"
+                    android:hint="Nombre"
+                    android:inputType="textCapWords"
+                    android:paddingLeft="15dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
+                android:orientation="vertical">
+
+                <Spinner
+                    android:id="@+id/spinnerProductEdit"
+                    style="@style/Widget.AppCompat.Spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/spinner_bg"
+                    android:dropDownWidth="300dp"
+                    android:dropDownVerticalOffset="?attr/dropdownListPreferredItemHeight"
+                    android:popupBackground="@android:color/white"
+                    android:popupElevation="3dp"
+                    android:stateListAnimator="@drawable/spinner_sla"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/txtDialogEditProvPhone"
+                    style="@style/Widget.AppCompat.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/border_color"
+                    android:hint="Teléfono"
+                    android:inputType="number"
+                    android:paddingLeft="15dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/txtDialogEditProvEmail"
+                    style="@style/Widget.AppCompat.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/border_color"
+                    android:hint="Correo"
+                    android:inputType="textEmailAddress"
+                    android:paddingLeft="15dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/txtDialogEditProvPass"
+                    style="@style/Widget.AppCompat.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/border_color"
+                    android:hint="Contraseña"
+                    android:inputType="textPassword"
+                    android:paddingLeft="15dp" />
+            </LinearLayout>
 
             <View
-                android:layout_width="2dp"
-                android:layout_height="30dp"
-                android:background="@color/md_grey_100" />
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/md_grey_50" />
 
-            <Button
-                android:id="@+id/btnDialogUpdate"
-                style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Enviar" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="0dp">
 
+                <Button
+                    android:id="@+id/btnDialogCancelEdit"
+                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Cancelar" />
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="30dp"
+                    android:background="@color/md_grey_100" />
+
+                <Button
+                    android:id="@+id/btnDialogUpdate"
+                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Enviar" />
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 </androidx.cardview.widget.CardView>

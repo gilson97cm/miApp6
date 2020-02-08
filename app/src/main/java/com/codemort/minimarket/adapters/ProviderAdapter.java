@@ -76,13 +76,18 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
     JsonObjectRequest jsonObjectRequest;
     StringRequest stringRequest;//SE MODIFICA
 
-    //EditText txtDialogCant;
-    //TextView txtDialogIdProv;
-    TextView txtDialogNameProv;
-    TextView txtDialogEmailProv;
-    //TextView txtDialogProductNameProv;
+    //START OBJECTS OF DIALOG
+    TextView txtDialogIdProv;
+    EditText txtDialogEditProvRuc;
+    EditText txtDialogEditProvCompany;
+    EditText txtDialogEditProvName;
+    Spinner spinnerProductEdit;
+    EditText txtDialogEditProvPhone;
+    EditText txtDialogEditProvEmail;
+    EditText txtDialogEditProvPass;
     Button btnDialogCancelEdit;
     Button btnDialogUpdate;
+    //END OBJECTS OF DIALOG
 
     //enviar email
     String your_email;
@@ -93,8 +98,8 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
     List<String> listProductString;
     List<ProductVo> listProductObject;
     RequestQueue requestQueue;
-    Spinner spinnerProductEdit;
-   // JsonObjectRequest jsonObjectRequest;
+
+    // JsonObjectRequest jsonObjectRequest;
     Util util;
 
 
@@ -158,12 +163,11 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
             btnCardDestroyProv = (Button) itemView.findViewById(R.id.btnCardDestroyProv);
 
 
-
             listProductString = new ArrayList<String>();
             listProductObject = new ArrayList<>();
             requestQueue = Volley.newRequestQueue(context);
             util = new Util();
-          //  loadProducts();
+            //  loadProducts();
 
 
         }
@@ -260,32 +264,30 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
             builder.setView(view);
             final AlertDialog dialog = builder.create();
             dialog.show();
+            txtDialogIdProv = (TextView) view.findViewById(R.id.txtDialogIdProv);
+            txtDialogEditProvRuc = (EditText) view.findViewById(R.id.txtDialogEditProvRuc);
+            txtDialogEditProvCompany = (EditText) view.findViewById(R.id.txtDialogEditProvCompany);
+            txtDialogEditProvName = (EditText) view.findViewById(R.id.txtDialogEditProvName);
             spinnerProductEdit = (Spinner) view.findViewById(R.id.spinnerProductEdit);
+            txtDialogEditProvPhone = (EditText) view.findViewById(R.id.txtDialogEditProvPhone);
+            txtDialogEditProvEmail = (EditText) view.findViewById(R.id.txtDialogEditProvEmail);
+            txtDialogEditProvPass = (EditText) view.findViewById(R.id.txtDialogEditProvPass);
+            btnDialogCancelEdit = (Button) view.findViewById(R.id.btnDialogCancelEdit);
+            btnDialogUpdate = (Button) view.findViewById(R.id.btnDialogUpdate);
             loadProducts();
 
-            //  spinnerProduct = (Spinner) view.findViewById(R.id.spinnerProductEdit);
-
-          /*
-            loadProducts();*/
-
-         /*   txtDialogCant = (EditText) view.findViewById(R.id.txtDialogCant);
-            txtDialogIdProv = (TextView) view.findViewById(R.id.txtDialogIdProv);
-            txtDialogNameProv = (TextView) view.findViewById(R.id.txtDialogNameProv);
-            txtDialogEmailProv = (TextView) view.findViewById(R.id.txtDialogEmailProv);
-            txtDialogProductNameProv = (TextView) view.findViewById(R.id.txtDialogProductProv);
-            btnDialogCancel = (Button) view.findViewById(R.id.btnDialogCancel);
-            btnDialogSendOrder = (Button) view.findViewById(R.id.btnDialogSendOrder);
-
-            txtDialogNameProv.setText(cardNameProv.getText().toString());
-            txtDialogEmailProv.setText(cardEmailProv.getText().toString());
-            txtDialogProductNameProv.setText(cardProductNameProv.getText().toString());
-            txtDialogIdProv.setText(cardIdProv.getText().toString());*/
+            txtDialogIdProv.setText(cardIdProv.getText().toString());
+            txtDialogEditProvRuc.setText(cardRucProv.getText().toString());
+            txtDialogEditProvCompany.setText(cardCompanyProv.getText().toString());
+            txtDialogEditProvName.setText(cardNameProv.getText().toString());
+            txtDialogEditProvPhone.setText(cardPhoneProv.getText().toString());
+            txtDialogEditProvEmail.setText(cardEmailProv.getText().toString());
 
 
-          /*  btnDialogUpdate.setOnClickListener(new View.OnClickListener() {
+            btnDialogUpdate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                  //  validate();
+                      validate();
                     //Toast.makeText(context, "Enviando...", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
@@ -296,7 +298,7 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
                     //Toast.makeText(context,"Enviando...",Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
-            });*/
+            });
         }
 
         //dialogo para el ingreso de la cantidad
@@ -339,16 +341,16 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
         }*/
 
         //enviar y registrar pedido
-        private void validate() {
-            //  String name_product = txtDialogProductNameProv.getText().toString();
-            //    String cant_product = txtDialogCant.getText().toString();
-         /*   String prov_id = txtDialogIdProv.getText().toString();
+      /*  private void validate() {
+            String name_product = txtDialogProductNameProv.getText().toString();
+            String cant_product = txtDialogCant.getText().toString();
+            String prov_id = txtDialogIdProv.getText().toString();
             if (name_product.isEmpty() || prov_id.isEmpty()) {
                 Toast.makeText(context, "Hay campos vacios.", Toast.LENGTH_SHORT).show();
             } else {
                 cargarWebService();
-            }*/
-        }
+            }
+        }*/
 
       /*  private void cargarWebService() {
 
@@ -409,65 +411,17 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
 
         //START LOGIC SPINNER
 
-       private void loadProducts() {
+        private void loadProducts() {
             progress = new ProgressDialog(context);
             progress.setMessage("Cargando...");
             progress.show();
-
             String URL = util.getHost() + "/wsJSONListProducts.php";
-
             jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, this, this);
             //requestQueue.add(jsonObjectRequest);
-
             VolleySingleton.getIntanciaVolley(context).addToRequestQueue(jsonObjectRequest);
         }
 
-
-        ///END LOGIC SPINNER
-
-      /*  private void sendMail() {
-            your_email = "elizabethminimarket@gmail.com";
-            your_pass = "doris_saquinga";
-            Session session = null;
-
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-
-            Properties properties = new Properties();
-            properties.put("mail.smtp.host", "smtp.googlemail.com");
-            properties.put("mail.smtp.socketFactory.port", "465");
-            properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-            properties.put("mail.smtp.auth", "true");
-            properties.put("mail.smtp.port", "465");
-
-            try {
-                session = Session.getDefaultInstance(properties, new Authenticator() {
-                    @Override
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(your_email, your_pass);
-                    }
-                });
-
-                if (session != null) {
-                    Message message = new MimeMessage(session);
-                    message.setFrom(new InternetAddress(your_email));
-                    message.setSubject("Pedido Minimarket");
-                    message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(txtDialogEmailProv.getText().toString()));
-                    message.setContent("<h4><strong>MINIMARKET ELIZABETH</strong><h4> <br>" +
-                            "<hr>"+
-                            "<strong>Detalle de pedido:</strong><br>" +
-                            "<hr>"+
-                            "PRODUCTO: <strong>"+txtDialogProductNameProv.getText().toString()+"</strong><br>"+
-                            "CANTIDAD: <strong>"+txtDialogCant.getText().toString()+"</strong>", "text/html; charset=utf-8");
-                    Transport.send(message);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }*/
-
-       @Override
+        @Override
         public void onErrorResponse(VolleyError error) {
             Toast.makeText(context, "Sin Datos.", Toast.LENGTH_LONG).show();
             System.out.println();
@@ -521,5 +475,51 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
                 progress.hide();
             }
         }
+
+        ///END LOGIC SPINNER
+
+      /*  private void sendMail() {
+            your_email = "elizabethminimarket@gmail.com";
+            your_pass = "doris_saquinga";
+            Session session = null;
+
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            Properties properties = new Properties();
+            properties.put("mail.smtp.host", "smtp.googlemail.com");
+            properties.put("mail.smtp.socketFactory.port", "465");
+            properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+            properties.put("mail.smtp.auth", "true");
+            properties.put("mail.smtp.port", "465");
+
+            try {
+                session = Session.getDefaultInstance(properties, new Authenticator() {
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(your_email, your_pass);
+                    }
+                });
+
+                if (session != null) {
+                    Message message = new MimeMessage(session);
+                    message.setFrom(new InternetAddress(your_email));
+                    message.setSubject("Pedido Minimarket");
+                    message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(txtDialogEmailProv.getText().toString()));
+                    message.setContent("<h4><strong>MINIMARKET ELIZABETH</strong><h4> <br>" +
+                            "<hr>"+
+                            "<strong>Detalle de pedido:</strong><br>" +
+                            "<hr>"+
+                            "PRODUCTO: <strong>"+txtDialogProductNameProv.getText().toString()+"</strong><br>"+
+                            "CANTIDAD: <strong>"+txtDialogCant.getText().toString()+"</strong>", "text/html; charset=utf-8");
+                    Transport.send(message);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }*/
+
+
     }
 }
