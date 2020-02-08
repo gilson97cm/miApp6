@@ -304,6 +304,7 @@ public class AddProvider extends Fragment implements View.OnClickListener, Respo
              //   String product = "2"; //txtProductProv.getText().toString();
                 String phone = txtPhoneProv.getText().toString();
                 String email = txtEmailProv.getText().toString();
+                String pass = txtPassProv.getText().toString();
                 Map<String, String> parametros = new HashMap<>();
 
                 //lo de las comillas recibe el post en el api
@@ -311,7 +312,7 @@ public class AddProvider extends Fragment implements View.OnClickListener, Respo
                 parametros.put("company_prov", company);
                 parametros.put("name_prov", name);
                 parametros.put("email_prov", email);
-                parametros.put("pass_prov", email);
+                parametros.put("pass_prov", pass);
                 parametros.put("phone_prov", phone);
 
                 //enviar id de producto cargado en spinner
