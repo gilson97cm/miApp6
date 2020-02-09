@@ -127,6 +127,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.cardDetailProd.setText(listProducts.get(position).getDetalleProd().toString());
         holder.cardPriceProd.setText(listProducts.get(position).getPrecioProd().toString());
         holder.cardStockProd.setText(listProducts.get(position).getStockProd().toString());
+        holder.cardDateProd.setText(listProducts.get(position).getFechaProd().toString());
 
 
         holder.setOnClickListeners();
@@ -135,6 +136,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public int getItemCount() {
         return listProducts.size();
+    }
+
+    public void updateList(ArrayList<ProductVo> dealList_) {
+        this.listProducts = new ArrayList<>();
+        this.listProducts.addAll(dealList_);
+        notifyDataSetChanged();
     }
 
     public class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -312,7 +319,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             progress.show();
 
 
-            String url=util.getHost()+"/wsJSONUpdatePrduct.php";
+            String url=util.getHost()+"/wsJSONUpdateProduct.php";
 
             stringRequest=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                 @Override
@@ -321,9 +328,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
                     if (response.trim().equalsIgnoreCase("actualiza")){
 
-                        Toast.makeText(context,"Se ha Actualizado con exito",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"Se ha actualizado con exito",Toast.LENGTH_SHORT).show();
                     }else{
-                        Toast.makeText(context,"No se ha Actualizado ",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"No se ha actualizado ",Toast.LENGTH_SHORT).show();
                         Log.i("RESPUESTA: ",""+response);
                     }
 
@@ -346,11 +353,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                     Map<String, String> parametros = new HashMap<>();
 
                     //lo de las comillas recibe el post en el api
-                    parametros.put("id_prod",idProd);
-                    parametros.put("name_prod", name);
-                    parametros.put("detail_prod", detail);
-                    parametros.put("price_prod", price);
-                    parametros.put("stock_prod", stock);
+                    parametros.put("id_product",idProd);
+                    parametros.put("name_product", name);
+                    parametros.put("detail_product", detail);
+                    parametros.put("price_product", price);
+                    parametros.put("stock_product", stock);
 
                     return parametros;
                 }

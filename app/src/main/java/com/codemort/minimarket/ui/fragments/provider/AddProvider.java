@@ -60,8 +60,7 @@ public class AddProvider extends Fragment implements View.OnClickListener, Respo
     EditText txtRucProv;
     EditText txtNameProv;
     EditText txtCompanyProv;
-  //  EditText txtLastNameProv;
-   Spinner spinnerProduct; // EditText txtProductProv; //cambiar con spinner
+   Spinner spinnerProduct;
     EditText txtPhoneProv;
     EditText txtEmailProv;
     EditText txtPassProv;

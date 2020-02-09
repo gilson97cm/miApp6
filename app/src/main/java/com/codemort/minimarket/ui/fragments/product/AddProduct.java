@@ -1,16 +1,36 @@
 package com.codemort.minimarket.ui.fragments.product;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.codemort.minimarket.R;
+import com.codemort.minimarket.helpers.Util;
+import com.codemort.minimarket.helpers.VolleySingleton;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -21,9 +41,20 @@ import com.codemort.minimarket.R;
  * Use the {@link AddProduct#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddProduct extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+public class AddProduct extends Fragment implements View.OnClickListener {
+
+    EditText txtNameProd;
+    EditText txtDetailProd;
+    EditText txtPriceProd;
+    EditText txtStockProd;
+    Button btnRegisterProd;
+
+    ProgressDialog progressDialog;
+    RequestQueue requestQueue;
+    JsonObjectRequest jsonObjectRequest;
+    Util util;
+    StringRequest stringRequest;
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -67,8 +98,107 @@ public class AddProduct extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_product, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_product, container, false);
+        init(view);
+
+        requestQueue = Volley.newRequestQueue(getContext());
+        util = new Util();
+
+        return view;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnRegisterProd:
+                validate();
+                break;
+        }
+    }
+
+    private void validate() {
+        String name = txtNameProd.getText().toString();
+        String detail = txtDetailProd.getText().toString();
+        String price = txtPriceProd.getText().toString();
+        String stock = txtStockProd.getText().toString();
+        if (name.isEmpty() || detail.isEmpty() || price.isEmpty() || stock.isEmpty()) {
+            Toast.makeText(getContext(), "Hay campos vacios.", Toast.LENGTH_SHORT).show();
+        } else {
+            cargarWebService();
+        }
+    }
+
+    private void cargarWebService() {
+
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Cargando...");
+        progressDialog.show();
+
+        //  String ip=getString(R.string.ip);
+        Util util = new Util();
+
+        String URL = util.getHost() + "wsJSONRegisterProducts.php";
+
+        //  String url=ip+"/ejemploBDRemota/wsJSONRegistroMovil.php?";
+
+        stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                progressDialog.hide();
+
+                if (response.trim().equalsIgnoreCase("registra")) {
+                    txtNameProd.setText("");
+                    txtDetailProd.setText("");
+                    txtPriceProd.setText("");
+                    txtStockProd.setText("");
+                    // photoPlant.setImageResource(R.drawable.not_photo);
+                    Toast.makeText(getContext(), "Se ha registrado con exito", Toast.LENGTH_SHORT).show();
+
+                } else if (response.trim().equalsIgnoreCase("isRepeat")) {
+                    Toast.makeText(getContext(), "El producto ya existe!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "No se ha registrado ", Toast.LENGTH_SHORT).show();
+                    Log.i("RESPUESTA: ", "" + response);
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(), "No se ha podido conectar", Toast.LENGTH_SHORT).show();
+                progressDialog.hide();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                String name = txtNameProd.getText().toString();
+                String detail = txtDetailProd.getText().toString();
+                String price = txtPriceProd.getText().toString();
+                String stock = txtStockProd.getText().toString();
+                Map<String, String> parametros = new HashMap<>();
+
+                //lo de las comillas recibe el post en el api
+                parametros.put("name_product", name);
+                parametros.put("detail_product", detail);
+                parametros.put("price_product", price);
+                parametros.put("stock_product", stock);
+                return parametros;
+            }
+        };
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 2, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        VolleySingleton.getIntanciaVolley(getContext()).addToRequestQueue(stringRequest);
+    }
+
+    private void init(View v){
+        txtNameProd = (EditText) v.findViewById(R.id.txtNameProd);
+        txtDetailProd = (EditText) v.findViewById(R.id.txtDetailProd);
+        txtPriceProd = (EditText) v.findViewById(R.id.txtPriceProd);
+        txtStockProd = (EditText) v.findViewById(R.id.txtStockProd);
+
+        btnRegisterProd = (Button) v.findViewById(R.id.btnRegisterProd);
+        btnRegisterProd.setOnClickListener(this);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -175,7 +175,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp"
                                 android:background="@drawable/border_color"
-                                android:hint="Teléfono"
+                                android:hint="Stock"
                                 android:inputType="number"
                                 android:paddingLeft="15dp" />
                         </LinearLayout>
@@ -206,7 +206,7 @@
                             android:orientation="vertical">
 
                             <Button
-                                android:id="@+id/btnRegisterProv"
+                                android:id="@+id/btnRegisterProd"
                                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
