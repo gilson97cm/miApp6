@@ -47,7 +47,6 @@ public class Products extends AppCompatActivity implements AddProduct.OnFragment
             last_nameHome = extras.getString("last_name");
             phoneHome = extras.getString("phone");
             emailHome = extras.getString("email");
-            //loadGreenHouseDetail(idinvernadero);
         }
 
         final Intent intent = new Intent(Products.this, Home.class);

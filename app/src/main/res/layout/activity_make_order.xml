@@ -15,4 +15,16 @@
         app:title="Realizar Pedido"
         app:titleTextColor="@color/md_white_1000" />
 
+    <LinearLayout
+        android:layout_marginTop="57dp"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerMakeOrders"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
 </RelativeLayout>

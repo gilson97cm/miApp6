@@ -1,16 +1,37 @@
 package com.codemort.minimarket.ui.fragments.product;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.codemort.minimarket.R;
+import com.codemort.minimarket.adapters.ProductAdapter;
+import com.codemort.minimarket.helpers.Util;
+import com.codemort.minimarket.helpers.VolleySingleton;
+import com.codemort.minimarket.model.ProductVo;
+import com.codemort.minimarket.model.ProductVo;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 
 /**
@@ -21,7 +42,14 @@ import com.codemort.minimarket.R;
  * Use the {@link ListProducts#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ListProducts extends Fragment {
+public class ListProducts extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener {
+    RecyclerView recyclerProducts;
+    ArrayList<ProductVo> listProducts;
+
+    ProgressDialog progress;
+    JsonObjectRequest jsonObjectRequest;
+
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -67,9 +95,89 @@ public class ListProducts extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_list_products, container, false);
+        View view = inflater.inflate(R.layout.fragment_list_products, container, false);
+        init(view);
+
+
+        listProducts=new ArrayList<>();
+
+        // recyclerProducts= (RecyclerView) view.findViewById(R.id.recyclerProducts);
+        recyclerProducts.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        recyclerProducts.setHasFixedSize(true);
+
+        // request= Volley.newRequestQueue(getContext());
+
+        //  listRecord = new ArrayList<>();
+        // recyclerRecord = (RecyclerView) view.findViewById(R.id.recyclerRecords);
+        //recyclerRecord.setLayoutManager(new LinearLayoutManager(getContext()));
+
+       cargarWebService();
+        return view;
     }
+
+    private void cargarWebService() {
+
+        progress = new ProgressDialog(getContext());
+        progress.setMessage("Consultando...");
+        progress.show();
+
+        Util util = new Util();
+
+        String URL = util.getHost() + "wsJSONListProductsWithStock.php";
+
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, this, this);
+        // request.add(jsonObjectRequest);
+        VolleySingleton.getIntanciaVolley(getContext()).addToRequestQueue(jsonObjectRequest);
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        Toast.makeText(getContext(), "Sin Datos.", Toast.LENGTH_LONG).show();
+        System.out.println();
+        Log.d("ERROR: ", error.toString());
+        progress.hide();
+    }
+
+    @Override
+    public void onResponse(JSONObject response) {
+        ProductVo product = null;
+
+        JSONArray json = response.optJSONArray("products");
+
+        try {
+
+            for (int i = 0; i < json.length(); i++) {
+                product = new ProductVo();
+                JSONObject jsonObject = null;
+                jsonObject = json.getJSONObject(i);
+
+                product.setCodProd(jsonObject.optInt("codProd"));
+                product.setFechaProd(jsonObject.optString("fechaProd"));
+                product.setNombreProd(jsonObject.optString("nombreProd"));
+                product.setDetalleProd(jsonObject.optString("detalleProd"));
+                product.setPrecioProd(jsonObject.optString("precioProd"));
+                product.setStockProd(jsonObject.optInt("stockProd"));
+
+                listProducts.add(product);
+            }
+            progress.hide();
+            ProductAdapter adapter = new ProductAdapter(getContext(),listProducts);
+            recyclerProducts.setAdapter(adapter);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "No se ha podido establecer conexión con el servidor" +
+                    " " + response, Toast.LENGTH_LONG).show();
+            progress.hide();
+        }
+
+    }
+
+    private void init(View view) {
+        recyclerProducts = (RecyclerView) view.findViewById(R.id.recyclerProducts);
+
+    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

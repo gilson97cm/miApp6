@@ -10,8 +10,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -19,12 +17,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.codemort.minimarket.R;
-import com.codemort.minimarket.adapters.OrderAdapter;
-import com.codemort.minimarket.adapters.ProviderAdapter;
+import com.codemort.minimarket.adapters.MakeOrderAdapter;
 import com.codemort.minimarket.helpers.Util;
 import com.codemort.minimarket.helpers.VolleySingleton;
 import com.codemort.minimarket.model.OrderVo;
-import com.codemort.minimarket.model.ProviderVo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,7 +28,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class MyOrders extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener {
+public class MyOrders extends AppCompatActivity {// implements Response.Listener<JSONObject>, Response.ErrorListener {
     Toolbar toolbar;
     //viene del home
     String nameHome;
@@ -95,12 +91,12 @@ public class MyOrders extends AppCompatActivity implements Response.Listener<JSO
 
         String URL = util.getHost() + "wsJSONListOrders.php";
 
-        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, this, this);
+      //  jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, this, this);
         // request.add(jsonObjectRequest);
         VolleySingleton.getIntanciaVolley(this).addToRequestQueue(jsonObjectRequest);
     }
 
-    @Override
+    /*@Override
     public void onErrorResponse(VolleyError error) {
         Toast.makeText(this, "Sin Datos.", Toast.LENGTH_LONG).show();
         System.out.println();
@@ -136,7 +132,7 @@ public class MyOrders extends AppCompatActivity implements Response.Listener<JSO
                 listOrders.add(order);
             }
             progress.hide();
-            OrderAdapter adapter = new OrderAdapter(this,listOrders);
+            MakeOrderAdapter adapter = new MakeOrderAdapter(MyOrders.this,listOrders);
             recyclerMyOrders.setAdapter(adapter);
 
         } catch (JSONException e) {
@@ -146,7 +142,7 @@ public class MyOrders extends AppCompatActivity implements Response.Listener<JSO
             progress.hide();
         }
 
-    }
+    }*/
 
     private void init() {
         toolbar = (Toolbar) findViewById(R.id.toolbarMyOrders);

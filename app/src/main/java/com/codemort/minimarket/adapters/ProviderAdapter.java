@@ -291,6 +291,8 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
                 @Override
                 public void onClick(View v) {
                     validate();
+                    listProductString.clear();
+                    listProductObject.clear();
                     //Toast.makeText(context, "Enviando...", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
@@ -298,6 +300,8 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
             btnDialogCancelEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    listProductString.clear();
+                    listProductObject.clear();
                     //Toast.makeText(context,"Enviando...",Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
