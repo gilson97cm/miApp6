@@ -99,6 +99,8 @@ public class MakeOrderAdapter extends RecyclerView.Adapter<MakeOrderAdapter.Prod
     // JsonObjectRequest jsonObjectRequest;
     Util util;
 
+    String  emailProvider;
+
 
     public MakeOrderAdapter(Context context, List<ProductVo> listProducts) {
         this.listProducts = listProducts;
@@ -270,7 +272,6 @@ public class MakeOrderAdapter extends RecyclerView.Adapter<MakeOrderAdapter.Prod
                     validate();
                     listProviderString.clear();
                     listProvderObject.clear();
-                    //Toast.makeText(context, "Enviando...", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
             });
@@ -291,7 +292,7 @@ public class MakeOrderAdapter extends RecyclerView.Adapter<MakeOrderAdapter.Prod
             if (cant.isEmpty()) {
                 Toast.makeText(context, "Ingrese la cantidad.", Toast.LENGTH_SHORT).show();
             } else {
-               // webServiceUpdate();
+                webServiceRegisterOrder();
             }
         }
 
@@ -353,8 +354,8 @@ public class MakeOrderAdapter extends RecyclerView.Adapter<MakeOrderAdapter.Prod
                 spinnerProviderMO.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        //codProd = listProvderObject.get(position).getCodProd().toString();
-                        // Toast.makeText(context, "id: " + codProd, Toast.LENGTH_SHORT).show();
+                        emailProvider = listProvderObject.get(position).getEmail().toString();
+                         Toast.makeText(context, "Correo:: " + emailProvider, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -386,63 +387,67 @@ public class MakeOrderAdapter extends RecyclerView.Adapter<MakeOrderAdapter.Prod
             } else {
                 webServiceUpdate();
             }
-        }
+        }*/
 
-        private void webServiceUpdate() {
-            progress=new ProgressDialog(context);
-            progress.setMessage("Cargando...");
+          private void webServiceRegisterOrder() {
+
+            progress = new ProgressDialog(context);
+            progress.setMessage("Enviando...");
             progress.show();
 
+            //  String ip=getString(R.string.ip);
+            Util util = new Util();
 
-            String url=util.getHost()+"/wsJSONUpdatePrduct.php";
+            String URL = util.getHost() + "wsJSONRegisterOrders.php";
 
-            stringRequest=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            //  String url=ip+"/ejemploBDRemota/wsJSONRegistroMovil.php?";
+
+            stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+
                 @Override
                 public void onResponse(String response) {
                     progress.hide();
 
-                    if (response.trim().equalsIgnoreCase("actualiza")){
+                    if (response.trim().equalsIgnoreCase("registra")) {
+                        //txtDialogCant.setText("");
+                         sendMail();
+                        // photoPlant.setImageResource(R.drawable.not_photo);
+                        Toast.makeText(context, "Se ha Enviado con exito", Toast.LENGTH_SHORT).show();
 
-                        Toast.makeText(context,"Se ha Actualizado con exito",Toast.LENGTH_SHORT).show();
-                    }else{
-                        Toast.makeText(context,"No se ha Actualizado ",Toast.LENGTH_SHORT).show();
-                        Log.i("RESPUESTA: ",""+response);
+                    } else {
+                        Toast.makeText(context, "No se ha registrado ", Toast.LENGTH_SHORT).show();
+                        Log.i("RESPUESTA: ", "" + response);
                     }
 
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(context,"No se ha podido conectar",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "No se ha podido conectar", Toast.LENGTH_SHORT).show();
                     progress.hide();
                 }
-            }){
+            }) {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
-                    String idProd = txtDialogProdIdProduct.getText().toString();
-                    String name = txtDialogEditProdName.getText().toString();
-                    String detail = txtDialogEditProdDetail.getText().toString();
-                    String price = txtDialogEditProdPrice.getText().toString();
-                    String stock = txtDialogEditProdStock.getText().toString();
 
+                     String id_product = txtDialogIdProductMO.getText().toString();
+                      String cant_product = txtDialogCantMO.getText().toString();
+                    //  String prov_id = txtDialogIdProv.getText().toString();
                     Map<String, String> parametros = new HashMap<>();
 
-                    //lo de las comillas recibe el post en el api
-                    parametros.put("id_prod",idProd);
-                    parametros.put("name_prod", name);
-                    parametros.put("detail_prod", detail);
-                    parametros.put("price_prod", price);
-                    parametros.put("stock_prod", stock);
+                     parametros.put("id_product", id_product);
+                     parametros.put("cant_product", cant_product);
+                    // parametros.put("prov_id", prov_id);
 
                     return parametros;
                 }
             };
-            //request.add(stringRequest);
+            stringRequest.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 2, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             VolleySingleton.getIntanciaVolley(context).addToRequestQueue(stringRequest);
-        }*/
+        }
 
 
-      /*  private void sendMail() {
+       private void sendMail() {
             your_email = "elizabethminimarket@gmail.com";
             your_pass = "doris_saquinga";
             Session session = null;
@@ -469,20 +474,20 @@ public class MakeOrderAdapter extends RecyclerView.Adapter<MakeOrderAdapter.Prod
                     Message message = new MimeMessage(session);
                     message.setFrom(new InternetAddress(your_email));
                     message.setSubject("Pedido Minimarket");
-                    message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(txtDialogEmailProv.getText().toString()));
+                    message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailProvider));
                     message.setContent("<h4><strong>MINIMARKET ELIZABETH</strong><h4> <br>" +
                             "<hr>"+
                             "<strong>Detalle de pedido:</strong><br>" +
                             "<hr>"+
-                            "PRODUCTO: <strong>"+txtDialogProductNameProv.getText().toString()+"</strong><br>"+
-                            "CANTIDAD: <strong>"+txtDialogCant.getText().toString()+"</strong>", "text/html; charset=utf-8");
+                            "PRODUCTO: <strong>"+txtDialogProductMO.getText().toString()+"</strong><br>"+
+                            "CANTIDAD: <strong>"+txtDialogCantMO.getText().toString()+"</strong>", "text/html; charset=utf-8");
                     Transport.send(message);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-        }*/
+        }
 
 
     }

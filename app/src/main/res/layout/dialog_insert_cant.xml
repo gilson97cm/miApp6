@@ -42,7 +42,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:textSize="17sp"
+                    android:textSize="15sp"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -50,7 +50,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:textSize="17sp"
+                    android:textSize="15sp"
                     android:id="@+id/txtDialogProductMO"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
