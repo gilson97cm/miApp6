@@ -100,8 +100,6 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyOrderV
     // JsonObjectRequest jsonObjectRequest;
     Util util;
 
-    String  emailProvider;
-
 
     public MyOrderAdapter(Context context, List<OrderVo> listOrders) {
         this.listOrders = listOrders;
@@ -193,7 +191,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyOrderV
                     //  Toast.makeText(context, "Eliminar", Toast.LENGTH_SHORT).show();
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setMessage("¿Eliminar Pedido?");
+                    builder.setMessage("¿Cancelar Pedido?");
                     builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -216,7 +214,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyOrderV
         //eliminar producto
         private void webServiceDelete(String id) {
             progress = new ProgressDialog(context);
-            progress.setMessage("Eliminando...");
+            progress.setMessage("Cancelando...");
             progress.show();
 
             Util util = new Util();
@@ -229,7 +227,8 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyOrderV
 
                     if (response.trim().equalsIgnoreCase("elimina")) {
                         //volver a llamar al fragmento
-                        Toast.makeText(context, "Se ha eliminado con exito", Toast.LENGTH_SHORT).show();
+
+                        Toast.makeText(context, "Se ha cancelado con exito", Toast.LENGTH_SHORT).show();
                     } else {
                         if (response.trim().equalsIgnoreCase("noExiste")) {
                             Toast.makeText(context, "No se encuentra el proveedor ", Toast.LENGTH_SHORT).show();
@@ -276,10 +275,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyOrderV
             txtDialogOrderProd.setText(cardOrderProd.getText().toString());
             txtDialogOrderCant.setText(cardOrderCant.getText().toString());
             txtDialogOrderEmail.setText(cardOrderEmail.getText().toString());
-
-
-
-
+            
             btnDialogOrderSendUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -302,36 +298,22 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyOrderV
             if (cant.isEmpty()) {
                 Toast.makeText(context, "Ingrese la cantidad.", Toast.LENGTH_SHORT).show();
             } else {
-                webServiceRegisterOrder();
+                webServiceUpdateOrder();
             }
         }
 
 
         //enviar y registrar pedido
-      /*  private void validate() {
-            String name = txtDialogEditProdName.getText().toString();
-            String detail = txtDialogEditProdDetail.getText().toString();
-            String price = txtDialogEditProdPrice.getText().toString();
-            String stock = txtDialogEditProdStock.getText().toString();
-
-
-            if (name.isEmpty() || detail.isEmpty() || price.isEmpty() || stock.isEmpty()) {
-                Toast.makeText(context, "Hay campos vacios.", Toast.LENGTH_SHORT).show();
-            } else {
-                webServiceUpdate();
-            }
-        }*/
-
-        private void webServiceRegisterOrder() {
+        private void webServiceUpdateOrder() {
 
             progress = new ProgressDialog(context);
-            progress.setMessage("Enviando...");
+            progress.setMessage("Actualizando...");
             progress.show();
 
             //  String ip=getString(R.string.ip);
             Util util = new Util();
 
-            String URL = util.getHost() + "wsJSONRegisterOrders.php";
+            String URL = util.getHost() + "wsJSONUpdateOrders.php";
 
             //  String url=ip+"/ejemploBDRemota/wsJSONRegistroMovil.php?";
 
@@ -341,7 +323,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyOrderV
                 public void onResponse(String response) {
                     progress.hide();
 
-                    if (response.trim().equalsIgnoreCase("registra")) {
+                    if (response.trim().equalsIgnoreCase("actualiza")) {
                         //txtDialogCant.setText("");
                         sendMail();
                         // photoPlant.setImageResource(R.drawable.not_photo);
@@ -378,8 +360,6 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyOrderV
             stringRequest.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 2, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             VolleySingleton.getIntanciaVolley(context).addToRequestQueue(stringRequest);
         }
-
-
         private void sendMail() {
             your_email = "elizabethminimarket@gmail.com";
             your_pass = "doris_saquinga";
@@ -406,10 +386,11 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyOrderV
                 if (session != null) {
                     Message message = new MimeMessage(session);
                     message.setFrom(new InternetAddress(your_email));
-                    message.setSubject("Pedido Minimarket");
-                    message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailProvider));
-                    message.setContent("<h4><strong>MINIMARKET ELIZABETH</strong><h4> <br>" +
+                    message.setSubject("CAMBIO - Pedido Minimarket");
+                    message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(txtDialogOrderEmail.getText().toString()));
+                    message.setContent("<h3><strong>CAMBIO EN EL PEDIDO</strong></h3><br><h4><strong>MINIMARKET ELIZABETH</strong><h4> <br>" +
                             "<hr>"+
+                            "<strong>Solicitud de cambio.</strong><br>" +
                             "<strong>Detalle de pedido:</strong><br>" +
                             "<hr>"+
                             "PRODUCTO: <strong>"+txtDialogOrderProd.getText().toString()+"</strong><br>"+
