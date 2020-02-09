@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.codemort.minimarket.R;
 import com.codemort.minimarket.adapters.MakeOrderAdapter;
+import com.codemort.minimarket.adapters.MyOrderAdapter;
 import com.codemort.minimarket.helpers.Util;
 import com.codemort.minimarket.helpers.VolleySingleton;
 import com.codemort.minimarket.model.OrderVo;
@@ -28,7 +29,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class MyOrders extends AppCompatActivity {// implements Response.Listener<JSONObject>, Response.ErrorListener {
+public class MyOrders extends AppCompatActivity  implements Response.Listener<JSONObject>, Response.ErrorListener {
     Toolbar toolbar;
     //viene del home
     String nameHome;
@@ -91,12 +92,12 @@ public class MyOrders extends AppCompatActivity {// implements Response.Listener
 
         String URL = util.getHost() + "wsJSONListOrders.php";
 
-      //  jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, this, this);
-        // request.add(jsonObjectRequest);
+       jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, this, this);
+      //  request.add(jsonObjectRequest);
         VolleySingleton.getIntanciaVolley(this).addToRequestQueue(jsonObjectRequest);
     }
 
-    /*@Override
+    @Override
     public void onErrorResponse(VolleyError error) {
         Toast.makeText(this, "Sin Datos.", Toast.LENGTH_LONG).show();
         System.out.println();
@@ -117,22 +118,20 @@ public class MyOrders extends AppCompatActivity {// implements Response.Listener
                 JSONObject jsonObject = null;
                 jsonObject = json.getJSONObject(i);
 
-                order.setId(jsonObject.optInt("id"));
-                order.setName_product(jsonObject.optString("name_product"));
-                order.setCant_product(jsonObject.optString("cant_product"));
-                order.setProv_id(jsonObject.optInt("prov_id"));
+                order.setId_pedido(jsonObject.optInt("id_pedido"));
                 order.setDate_order(jsonObject.optString("date_order"));
-
-                //order.setId_prov(jsonObject.optInt("id"));
-                order.setName_prov(jsonObject.optString("name_prov"));
-                order.setLast_name_prov(jsonObject.optString("last_name_prov"));
-                order.setEmail_prov(jsonObject.optString("email_prov"));
-                order.setPhone_prov(jsonObject.optString("phone_prov"));
+                order.setEmpresaprov(jsonObject.optString("empresaprov"));
+                order.setNombre_prove(jsonObject.optString("nombre_prove"));
+                order.setCorreo_prove(jsonObject.optString("correo_prove"));
+                order.setTelefono_prove(jsonObject.optString("telefono_prove"));
+                order.setCodProd(jsonObject.optInt("codProd"));
+                order.setCantidad_prod(jsonObject.optString("cantidad_prod"));
+                order.setNombreProd(jsonObject.optString("nombreProd"));
 
                 listOrders.add(order);
             }
             progress.hide();
-            MakeOrderAdapter adapter = new MakeOrderAdapter(MyOrders.this,listOrders);
+            MyOrderAdapter adapter = new MyOrderAdapter(MyOrders.this,listOrders);
             recyclerMyOrders.setAdapter(adapter);
 
         } catch (JSONException e) {
@@ -142,7 +141,7 @@ public class MyOrders extends AppCompatActivity {// implements Response.Listener
             progress.hide();
         }
 
-    }*/
+    }
 
     private void init() {
         toolbar = (Toolbar) findViewById(R.id.toolbarMyOrders);

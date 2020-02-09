@@ -44,13 +44,35 @@
                             android:visibility="gone" />
 
                         <TextView
-                            android:id="@+id/cardOrderIdProv"
+                            android:id="@+id/cardOrderIdPed"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="prov001"
                             android:textSize="13sp"
                             android:visibility="gone" />
 
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Proveedor:"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/cardOrderCompany"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:text="codemortporduct"
+                                android:textColor="@android:color/darker_gray" />
+
+                        </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -72,14 +94,6 @@
                                 android:text="codemortporduct"
                                 android:textColor="@android:color/darker_gray" />
 
-                            <TextView
-                                android:visibility="gone"
-                                android:layout_weight="1"
-                                android:id="@+id/cardOrderLastNameProv"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:text="codemort"
-                                android:textSize="13sp" />
                         </LinearLayout>
 
                         <LinearLayout

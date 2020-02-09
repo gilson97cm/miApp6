@@ -1,48 +1,39 @@
 package com.codemort.minimarket.model;
 
 public class OrderVo {
-    Integer id;
-    String name_product;
-    String cant_product;
-    Integer prov_id;
+
+    Integer id_pedido;
     String date_order;
+    String empresaprov;
+    String nombre_prove;
+    String telefono_prove;
+    Integer codProd;
+    String nombreProd;
+    String correo_prove;
+    String cantidad_prod;
 
-    Integer id_prov;
-    String name_prov;
-    String last_name_prov;
-    String email_prov;
-    String phone_prov;
-
-    public Integer getId() {
-        return id;
+    public String getCantidad_prod() {
+        return cantidad_prod;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setCantidad_prod(String cantidad_prod) {
+        this.cantidad_prod = cantidad_prod;
     }
 
-    public String getName_product() {
-        return name_product;
+    public String getCorreo_prove() {
+        return correo_prove;
     }
 
-    public void setName_product(String name_product) {
-        this.name_product = name_product;
+    public void setCorreo_prove(String correo_prove) {
+        this.correo_prove = correo_prove;
     }
 
-    public String getCant_product() {
-        return cant_product;
+    public Integer getId_pedido() {
+        return id_pedido;
     }
 
-    public void setCant_product(String cant_product) {
-        this.cant_product = cant_product;
-    }
-
-    public Integer getProv_id() {
-        return prov_id;
-    }
-
-    public void setProv_id(Integer prov_id) {
-        this.prov_id = prov_id;
+    public void setId_pedido(Integer id_pedido) {
+        this.id_pedido = id_pedido;
     }
 
     public String getDate_order() {
@@ -53,43 +44,43 @@ public class OrderVo {
         this.date_order = date_order;
     }
 
-    public Integer getId_prov() {
-        return id_prov;
+    public String getEmpresaprov() {
+        return empresaprov;
     }
 
-    public void setId_prov(Integer id_prov) {
-        this.id_prov = id_prov;
+    public void setEmpresaprov(String empresaprov) {
+        this.empresaprov = empresaprov;
     }
 
-    public String getName_prov() {
-        return name_prov;
+    public String getNombre_prove() {
+        return nombre_prove;
     }
 
-    public void setName_prov(String name_prov) {
-        this.name_prov = name_prov;
+    public void setNombre_prove(String nombre_prove) {
+        this.nombre_prove = nombre_prove;
     }
 
-    public String getLast_name_prov() {
-        return last_name_prov;
+    public String getTelefono_prove() {
+        return telefono_prove;
     }
 
-    public void setLast_name_prov(String last_name_prov) {
-        this.last_name_prov = last_name_prov;
+    public void setTelefono_prove(String telefono_prove) {
+        this.telefono_prove = telefono_prove;
     }
 
-    public String getEmail_prov() {
-        return email_prov;
+    public Integer getCodProd() {
+        return codProd;
     }
 
-    public void setEmail_prov(String email_prov) {
-        this.email_prov = email_prov;
+    public void setCodProd(Integer codProd) {
+        this.codProd = codProd;
     }
 
-    public String getPhone_prov() {
-        return phone_prov;
+    public String getNombreProd() {
+        return nombreProd;
     }
 
-    public void setPhone_prov(String phone_prov) {
-        this.phone_prov = phone_prov;
+    public void setNombreProd(String nombreProd) {
+        this.nombreProd = nombreProd;
     }
 }
