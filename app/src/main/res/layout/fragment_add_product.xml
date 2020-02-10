@@ -186,6 +186,48 @@
                             android:layout_weight="1" />
 
                     </LinearLayout>
+                    <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="10"
+
+                        android:orientation="vertical">
+                        <Spinner
+                            android:id="@+id/spinnerProvider"
+                            style="@style/Widget.AppCompat.Spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+
+                            android:background="@drawable/spinner_bg"
+                            android:dropDownWidth="300dp"
+                            android:dropDownVerticalOffset="?attr/dropdownListPreferredItemHeight"
+
+                            android:popupBackground="@android:color/white"
+                            android:popupElevation="3dp"
+                            android:stateListAnimator="@drawable/spinner_sla"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1" />
+
+                </LinearLayout >
 
                     <LinearLayout
                         android:layout_width="match_parent"

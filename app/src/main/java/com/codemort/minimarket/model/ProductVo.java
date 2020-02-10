@@ -8,6 +8,16 @@ public class ProductVo {
     String precioProd;
     Integer stockProd;
 
+    String company;
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
     public Integer getCodProd() {
         return codProd;
     }

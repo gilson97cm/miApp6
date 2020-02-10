@@ -84,7 +84,6 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
     EditText txtDialogEditProvRuc;
     EditText txtDialogEditProvCompany;
     EditText txtDialogEditProvName;
-    Spinner spinnerProductEdit;
     EditText txtDialogEditProvPhone;
     EditText txtDialogEditProvEmail;
     EditText txtDialogEditProvPass;
@@ -129,7 +128,6 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
         holder.cardRucProv.setText(listProviders.get(position).getRuc().toString());
         holder.cardNameProv.setText(listProviders.get(position).getName().toString());
         holder.cardCompanyProv.setText(listProviders.get(position).getCompany().toString());
-        holder.cardProductNameProv.setText(listProviders.get(position).getProduct().toString());
         holder.cardPhoneProv.setText(listProviders.get(position).getPhone().toString());
         holder.cardEmailProv.setText(listProviders.get(position).getEmail().toString());
 
@@ -142,20 +140,20 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
         return listProviders.size();
     }
 
-    public class ProviderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, Response.Listener<JSONObject>, Response.ErrorListener {
+    public class ProviderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // Context context;
 
         TextView cardIdProv;
         TextView cardRucProv;
         TextView cardCompanyProv;
         TextView cardNameProv;
-        TextView cardProductNameProv;
+
         TextView cardPhoneProv;
         TextView cardEmailProv;
 
         Button btnCardUpdateProv;
         Button btnCardDestroyProv;
-        String codProd;
+
 
 
         public ProviderViewHolder(View itemView) {
@@ -164,8 +162,7 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
             cardRucProv = (TextView) itemView.findViewById(R.id.cardRucProv);
             cardNameProv = (TextView) itemView.findViewById(R.id.cardNameProv);
             cardCompanyProv = (TextView) itemView.findViewById(R.id.cardCompanyProv);
-            cardProductNameProv = (TextView) itemView.findViewById(R.id.cardProductNameProv);
-            cardPhoneProv = (TextView) itemView.findViewById(R.id.cardPhoneProv);
+          cardPhoneProv = (TextView) itemView.findViewById(R.id.cardPhoneProv);
             cardEmailProv = (TextView) itemView.findViewById(R.id.cardEmailProv);
 
             btnCardUpdateProv = (Button) itemView.findViewById(R.id.btnCardUpdateProv);
@@ -269,18 +266,16 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
             txtDialogEditProvRuc = (EditText) view.findViewById(R.id.txtDialogEditProvRuc);
             txtDialogEditProvCompany = (EditText) view.findViewById(R.id.txtDialogEditProvCompany);
             txtDialogEditProvName = (EditText) view.findViewById(R.id.txtDialogEditProvName);
-            spinnerProductEdit = (Spinner) view.findViewById(R.id.spinnerProductEdit);
-            txtDialogEditProvPhone = (EditText) view.findViewById(R.id.txtDialogEditProvPhone);
+           txtDialogEditProvPhone = (EditText) view.findViewById(R.id.txtDialogEditProvPhone);
             txtDialogEditProvEmail = (EditText) view.findViewById(R.id.txtDialogEditProvEmail);
             txtDialogEditProvPass = (EditText) view.findViewById(R.id.txtDialogEditProvPass);
             btnDialogCancelEdit = (Button) view.findViewById(R.id.btnDialogCancelEdit);
             btnDialogUpdate = (Button) view.findViewById(R.id.btnDialogUpdate);
-            loadProducts();
+           // loadProducts();
 
             txtDialogIdProv.setText(cardIdProv.getText().toString());
             txtDialogEditProvRuc.setText(cardRucProv.getText().toString());
             txtDialogEditProvCompany.setText(cardCompanyProv.getText().toString());
-           // spinnerProductEdit.setSelection(5);
             txtDialogEditProvName.setText(cardNameProv.getText().toString());
             txtDialogEditProvPhone.setText(cardPhoneProv.getText().toString());
             txtDialogEditProvEmail.setText(cardEmailProv.getText().toString());
@@ -291,8 +286,6 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
                 @Override
                 public void onClick(View v) {
                     validate();
-                    listProductString.clear();
-                    listProductObject.clear();
                     //Toast.makeText(context, "Enviando...", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
@@ -300,8 +293,6 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
             btnDialogCancelEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listProductString.clear();
-                    listProductObject.clear();
                     //Toast.makeText(context,"Enviando...",Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
@@ -374,9 +365,6 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
                     parametros.put("pass_prov", pass);
                     parametros.put("phone_prov", phone);
 
-                    //enviar id de producto cargado en spinner
-                    parametros.put("product_id", codProd);
-
                     return parametros;
                 }
             };
@@ -442,83 +430,6 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.Provid
             VolleySingleton.getIntanciaVolley(context).addToRequestQueue(stringRequest);
         }*/
 
-        //START LOGIC SPINNER
-
-        private void loadProducts() {
-            progress = new ProgressDialog(context);
-            progress.setMessage("Cargando...");
-            progress.show();
-            String URL = util.getHost() + "/wsJSONListProducts.php";
-            jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, this, this);
-            //requestQueue.add(jsonObjectRequest);
-            VolleySingleton.getIntanciaVolley(context).addToRequestQueue(jsonObjectRequest);
-        }
-
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            Toast.makeText(context, "Sin Datos.", Toast.LENGTH_LONG).show();
-            System.out.println();
-            Log.d("ERROR: ", error.toString());
-            progress.hide();
-        }
-
-
-        @Override
-        public void onResponse(JSONObject response) {
-            ProductVo productVo = null;
-            JSONArray json = response.optJSONArray("products");
-
-            try {
-                // assert json != null;
-                for (int i = 0; i < json.length(); i++) {
-                    productVo = new ProductVo();
-                    JSONObject jsonObject = null;
-                    jsonObject = json.getJSONObject(i);
-                    productVo.setCodProd(jsonObject.optInt("codProd"));
-                    productVo.setNombreProd(jsonObject.optString("nombreProd"));
-
-                    listProductObject.add(productVo);
-                }
-                progress.hide();
-                //lisMarketString.add("Seleccione..");
-                for (int i = 0; i < listProductObject.size(); i++) {
-                    listProductString.add("" + listProductObject.get(i).getNombreProd());
-                }
-
-                //SPINNER
-                ArrayAdapter adapter = new ArrayAdapter<String>(context, R.layout.item_spinner, listProductString);
-                adapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
-                spinnerProductEdit.setAdapter(adapter);
-
-                //cargar spinner con el nombre de producto
-                String compareValue = cardProductNameProv.getText().toString();
-                if (compareValue != null) {
-                    int spinnerPosition = adapter.getPosition(compareValue);
-                    spinnerProductEdit.setSelection(spinnerPosition);
-                }
-                //evento al spinner de la ventana de dialogo
-                spinnerProductEdit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        codProd = listProductObject.get(position).getCodProd().toString();
-                       // Toast.makeText(context, "id: " + codProd, Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                });
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Toast.makeText(context, "No se ha podido establecer conexión con el servidor" +
-                        " " + response, Toast.LENGTH_LONG).show();
-                progress.hide();
-            }
-        }
-
-        ///END LOGIC SPINNER
 
       /*  private void sendMail() {
             your_email = "elizabethminimarket@gmail.com";

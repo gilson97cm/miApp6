@@ -45,6 +45,7 @@ import com.codemort.minimarket.helpers.Util;
 import com.codemort.minimarket.helpers.VolleySingleton;
 import com.codemort.minimarket.model.ProductVo;
 import com.codemort.minimarket.model.ProductVo;
+import com.codemort.minimarket.model.ProviderVo;
 import com.codemort.minimarket.ui.activities.MyOrders;
 import com.codemort.minimarket.ui.activities.Providers;
 
@@ -84,7 +85,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     EditText txtDialogEditProdDetail;
     EditText txtDialogEditProdPrice;
     EditText txtDialogEditProdStock;
-
+    Spinner spinnerProviderEdit;
     Button btnDialogProdCancelEdit;
     Button btnDialogProdUpdate;
 
@@ -98,8 +99,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     //SPINNER
     //String[] data = {"Cifrado", "Descifrado"};
-    List<String> listProductString;
-    List<ProductVo> listProductObject;
+    List<String> listProviderString;
+    List<ProviderVo> listProviderObject;
     RequestQueue requestQueue;
 
     // JsonObjectRequest jsonObjectRequest;
@@ -128,6 +129,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.cardPriceProd.setText(listProducts.get(position).getPrecioProd().toString());
         holder.cardStockProd.setText(listProducts.get(position).getStockProd().toString());
         holder.cardDateProd.setText(listProducts.get(position).getFechaProd().toString());
+        holder.cardCompanyProd.setText(listProducts.get(position).getCompany().toString());
 
 
         holder.setOnClickListeners();
@@ -144,7 +146,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         notifyDataSetChanged();
     }
 
-    public class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, Response.ErrorListener, Response.Listener<JSONObject> {
         // Context context;
         TextView cardIdProd;
         TextView cardNameProd;
@@ -152,8 +154,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         TextView cardPriceProd;
         TextView cardStockProd;
         TextView cardDateProd;
+       TextView cardCompanyProd;
         Button btnCardUpdateProd;
         Button btnCardDestroyProd;
+        String idProv;
 
 
 
@@ -165,12 +169,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             cardPriceProd = (TextView) itemView.findViewById(R.id.cardPriceProd);
             cardStockProd = (TextView) itemView.findViewById(R.id.cardStockProd);
             cardDateProd = (TextView) itemView.findViewById(R.id.cardDateProd);
+            cardCompanyProd = (TextView) itemView.findViewById(R.id.cardCompanyProd);
+
 
             btnCardUpdateProd = (Button) itemView.findViewById(R.id.btnCardUpdateProd);
             btnCardDestroyProd = (Button) itemView.findViewById(R.id.btnCardDestroyProd);
 
-            listProductString = new ArrayList<String>();
-            listProductObject = new ArrayList<>();
+            listProviderString = new ArrayList<String>();
+            listProviderObject = new ArrayList<>();
             requestQueue = Volley.newRequestQueue(context);
             util = new Util();
 
@@ -267,15 +273,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             txtDialogEditProdDetail = (EditText) view.findViewById(R.id.txtDialogEditProdDetail);
             txtDialogEditProdPrice = (EditText) view.findViewById(R.id.txtDialogEditProdPrice);
             txtDialogEditProdStock = (EditText) view.findViewById(R.id.txtDialogEditProdStock);
-            btnDialogProdCancelEdit = (Button) view.findViewById(R.id.btnDialogProdCancelEdit);
+            spinnerProviderEdit = (Spinner) view.findViewById(R.id.spinnerProviderEdit);
 
+            btnDialogProdCancelEdit = (Button) view.findViewById(R.id.btnDialogProdCancelEdit);
             btnDialogProdUpdate = (Button) view.findViewById(R.id.btnDialogProdUpdate);
-            //loadProducts();
+            loadProviders();
 
             txtDialogProdIdProduct.setText(cardIdProd.getText().toString());
             txtDialogEditProdName.setText(cardNameProd.getText().toString());
             txtDialogEditProdDetail.setText(cardDetailProd.getText().toString());
-            // spinnerProductEdit.setSelection(5);
             txtDialogEditProdPrice.setText(cardPriceProd.getText().toString());
             txtDialogEditProdStock.setText(cardStockProd.getText().toString());
 
@@ -285,6 +291,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 @Override
                 public void onClick(View v) {
                     validate();
+                    listProviderString.clear();
+                    listProviderObject.clear();
                     //Toast.makeText(context, "Enviando...", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
@@ -292,6 +300,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             btnDialogProdCancelEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    listProviderString.clear();
+                    listProviderObject.clear();
                     //Toast.makeText(context,"Enviando...",Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
@@ -358,6 +368,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                     parametros.put("detail_product", detail);
                     parametros.put("price_product", price);
                     parametros.put("stock_product", stock);
+                    parametros.put("provider_id", idProv);
 
                     return parametros;
                 }
@@ -365,6 +376,84 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             //request.add(stringRequest);
             VolleySingleton.getIntanciaVolley(context).addToRequestQueue(stringRequest);
         }
+
+        //START LOGIC SPINNER
+
+       private void loadProviders() {
+            progress = new ProgressDialog(context);
+            progress.setMessage("Cargando...");
+            progress.show();
+            String URL = util.getHost() + "/wsJSONListProviders.php";
+            jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, this, this);
+            //requestQueue.add(jsonObjectRequest);
+            VolleySingleton.getIntanciaVolley(context).addToRequestQueue(jsonObjectRequest);
+        }
+
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            Toast.makeText(context, "Sin Datos.", Toast.LENGTH_LONG).show();
+            System.out.println();
+            Log.d("ERROR: ", error.toString());
+            progress.hide();
+        }
+
+
+        @Override
+        public void onResponse(JSONObject response) {
+            ProviderVo providerVo = null;
+            JSONArray json = response.optJSONArray("providers");
+
+            try {
+                // assert json != null;
+                for (int i = 0; i < json.length(); i++) {
+                    providerVo = new ProviderVo();
+                    JSONObject jsonObject = null;
+                    jsonObject = json.getJSONObject(i);
+                    providerVo.setId(jsonObject.optInt("id_prove"));
+                    providerVo.setCompany(jsonObject.optString("empresaprov"));
+
+                    listProviderObject.add(providerVo);
+                }
+                progress.hide();
+                //lisMarketString.add("Seleccione..");
+                for (int i = 0; i < listProviderObject.size(); i++) {
+                    listProviderString.add("" + listProviderObject.get(i).getCompany());
+                }
+
+                //SPINNER
+                ArrayAdapter adapter = new ArrayAdapter<String>(context, R.layout.item_spinner, listProviderString);
+                adapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
+                spinnerProviderEdit.setAdapter(adapter);
+
+                //cargar spinner con el nombre de producto
+                String compareValue = cardCompanyProd.getText().toString();
+                if (compareValue != null) {
+                    int spinnerPosition = adapter.getPosition(compareValue);
+                    spinnerProviderEdit.setSelection(spinnerPosition);
+                }
+                //evento al spinner de la ventana de dialogo
+                spinnerProviderEdit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        idProv = listProviderObject.get(position).getId().toString();
+                        Toast.makeText(context, "id: " + idProv, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(context, "No se ha podido establecer conexión con el servidor" +
+                        " " + response, Toast.LENGTH_LONG).show();
+                progress.hide();
+            }
+        }
+
+        ///END LOGIC SPINNER
 
 
       /*  private void sendMail() {

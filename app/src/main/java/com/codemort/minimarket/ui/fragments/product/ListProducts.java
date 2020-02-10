@@ -157,6 +157,7 @@ public class ListProducts extends Fragment implements Response.Listener<JSONObje
                 product.setDetalleProd(jsonObject.optString("detalleProd"));
                 product.setPrecioProd(jsonObject.optString("precioProd"));
                 product.setStockProd(jsonObject.optInt("stockProd"));
+                product.setCompany(jsonObject.optString("empresaprov"));
 
                 listProducts.add(product);
             }
@@ -175,7 +176,6 @@ public class ListProducts extends Fragment implements Response.Listener<JSONObje
 
     private void init(View view) {
         recyclerProducts = (RecyclerView) view.findViewById(R.id.recyclerProducts);
-
     }
 
 
