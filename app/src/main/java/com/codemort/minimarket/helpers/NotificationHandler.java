@@ -1,4 +1,4 @@
-package com.codemort.minimarket;
+package com.codemort.minimarket.helpers;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -11,7 +11,9 @@ import android.graphics.Color;
 import android.graphics.drawable.Icon;
 import android.os.Build;
 
+import com.codemort.minimarket.R;
 import com.codemort.minimarket.ui.activities.MakeOrder;
+import com.codemort.minimarket.ui.activities.MyOrders;
 
 public class NotificationHandler extends ContextWrapper {
     
@@ -52,29 +54,23 @@ public class NotificationHandler extends ContextWrapper {
             // highChannel.setSound(defaultSoundUri, null);
             
             highChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
-            
-            NotificationChannel lowChannel = new NotificationChannel(
-                    CHANNEL_LOW_ID, CHANNEL_LOW_NAME, NotificationManager.IMPORTANCE_LOW);
-            lowChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-            
+
             getManager().createNotificationChannel(highChannel);
-            getManager().createNotificationChannel(lowChannel);
         }
     }
     
     public Notification.Builder createNotification(String title, String message, boolean isHighImportance) {
-        if (Build.VERSION.SDK_INT >= 26) {
-            if (isHighImportance) {
+       // if (Build.VERSION.SDK_INT >= 26) {
+           // if (isHighImportance) {
                 return this.createNotificationWithChannel(title, message, CHANNEL_HIGH_ID);
-            }
-            return this.createNotificationWithChannel(title, message, CHANNEL_LOW_ID);
-        }
-        return this.createNotificationWithoutChannel(title, message);
+          //  }
+        //}
+       // return this.createNotificationWithoutChannel(title, message);
     }
     
     private Notification.Builder createNotificationWithChannel(String title, String message, String channelId) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Intent intent = new Intent(this, MakeOrder.class);
+            Intent intent = new Intent(this, MyOrders.class);
             intent.putExtra("title", title);
             intent.putExtra("message", message);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -90,30 +86,30 @@ public class NotificationHandler extends ContextWrapper {
                     .setContentText(message)
                     // .addAction(action)
                     .setColor(getColor(R.color.colorPrimary))
-                    .setSmallIcon(android.R.drawable.stat_notify_chat)
+                    .setSmallIcon(R.mipmap.ic_lminimarket)
                     .setGroup(SUMMARY_GROUP_NAME)
                     .setAutoCancel(true);
         }
         return null;
     }
     
-    private Notification.Builder createNotificationWithoutChannel(String title, String message) {
+ /*   private Notification.Builder createNotificationWithoutChannel(String title, String message) {
         return new Notification.Builder(getApplicationContext())
                 .setContentTitle(title)
                 .setContentText(message)
-                .setSmallIcon(android.R.drawable.stat_notify_chat)
+                .setSmallIcon(R.mipmap.ic_lminimarket)
                 .setAutoCancel(true);
-    }
+    }*/
     
-    public void publishNotificationSummaryGroup(boolean isHighImportance) {
+ /*   public void publishNotificationSummaryGroup(boolean isHighImportance) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String channelId = (isHighImportance) ? CHANNEL_HIGH_ID : CHANNEL_LOW_ID;
             Notification summaryNotification = new Notification.Builder(getApplicationContext(), channelId)
-                    .setSmallIcon(android.R.drawable.stat_notify_call_mute)
+                    .setSmallIcon(R.mipmap.ic_lminimarket)
                     .setGroup(SUMMARY_GROUP_NAME)
                     .setGroupSummary(true)
                     .build();
             getManager().notify(SUMMARY_GROUP_ID, summaryNotification);
         }
-    }
+    }*/
 }

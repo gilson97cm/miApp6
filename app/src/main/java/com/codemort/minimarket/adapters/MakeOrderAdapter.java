@@ -2,23 +2,20 @@ package com.codemort.minimarket.adapters;
 
 
 import android.app.AlertDialog;
+import android.app.Notification;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.StrictMode;
-import android.provider.MediaStore;
 
-import android.transition.Fade;
+import android.text.TextUtils;
 import android.transition.Transition;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -26,10 +23,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.ActivityOptionsCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
@@ -41,15 +34,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.codemort.minimarket.helpers.NotificationHandler;
 import com.codemort.minimarket.R;
 import com.codemort.minimarket.helpers.Util;
 import com.codemort.minimarket.helpers.VolleySingleton;
 import com.codemort.minimarket.model.ProductVo;
-import com.codemort.minimarket.model.ProductVo;
 import com.codemort.minimarket.model.ProviderVo;
 import com.codemort.minimarket.ui.activities.MakeOrder;
-import com.codemort.minimarket.ui.activities.MyOrders;
-import com.codemort.minimarket.ui.activities.Providers;
 
 import android.widget.EditText;
 
@@ -147,6 +138,11 @@ public class MakeOrderAdapter extends RecyclerView.Adapter<MakeOrderAdapter.Prod
         Button btnCardDestroyProdMO;
         Button btnCardMakeOrder;
 
+        private boolean isHighImportance = false;
+        private NotificationHandler notificationHandler;
+
+        private int counter = 0;
+
 
         public ProductMOViewHolder(View itemView) {
             super(itemView);
@@ -164,6 +160,7 @@ public class MakeOrderAdapter extends RecyclerView.Adapter<MakeOrderAdapter.Prod
 
             listProviderString = new ArrayList<String>();
             listProvderObject = new ArrayList<>();
+            notificationHandler = new NotificationHandler(context);
             requestQueue = Volley.newRequestQueue(context);
             util = new Util();
 
@@ -414,6 +411,7 @@ public class MakeOrderAdapter extends RecyclerView.Adapter<MakeOrderAdapter.Prod
                     if (response.trim().equalsIgnoreCase("registra")) {
                             senData();
                          sendMail();
+                        sendNotification();
                         // photoPlant.setImageResource(R.drawable.not_photo);
                         Toast.makeText(context, "Se ha Enviado con exito", Toast.LENGTH_SHORT).show();
 
@@ -507,6 +505,17 @@ public class MakeOrderAdapter extends RecyclerView.Adapter<MakeOrderAdapter.Prod
             intent.putExtra("phone", phone);
             intent.putExtra("email", email);
             context.startActivity(intent);
+        }
+
+        private void sendNotification() {
+            String title = "Suministrar Producto";
+            String message = "Datos enviados correctamente.";
+
+            if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(message)) {
+                Notification.Builder nb = notificationHandler.createNotification(title, message, isHighImportance);
+                notificationHandler.getManager().notify(++counter, nb.build());
+              //  notificationHandler.publishNotificationSummaryGroup(isHighImportance);
+            }
         }
 
 

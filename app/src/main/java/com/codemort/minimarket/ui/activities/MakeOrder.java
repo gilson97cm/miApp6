@@ -5,38 +5,28 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Notification;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.codemort.minimarket.NotificationHandler;
 import com.codemort.minimarket.R;
 import com.codemort.minimarket.adapters.MakeOrderAdapter;
-import com.codemort.minimarket.adapters.ProductAdapter;
 import com.codemort.minimarket.helpers.Util;
 import com.codemort.minimarket.helpers.VolleySingleton;
 import com.codemort.minimarket.model.ProductVo;
-import com.codemort.minimarket.ui.fragments.product.AddProduct;
-import com.codemort.minimarket.ui.fragments.product.ListProducts;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
-import butterknife.ButterKnife;
 
 public class MakeOrder extends AppCompatActivity implements Response.ErrorListener, Response.Listener<JSONObject> {
     Toolbar toolbar;
@@ -52,10 +42,7 @@ public class MakeOrder extends AppCompatActivity implements Response.ErrorListen
     ProgressDialog progress;
     JsonObjectRequest jsonObjectRequest;
 
-    private boolean isHighImportance = false;
-    private NotificationHandler notificationHandler;
 
-    private int counter = 0;
 
 
     @Override
@@ -77,7 +64,7 @@ public class MakeOrder extends AppCompatActivity implements Response.ErrorListen
         }
 
       //  ButterKnife.bind(this); // Right after setContentView
-        notificationHandler = new NotificationHandler(this);
+
 
         final Intent intent = new Intent(MakeOrder.this, Home.class);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -151,7 +138,6 @@ public class MakeOrder extends AppCompatActivity implements Response.ErrorListen
             progress.hide();
             MakeOrderAdapter adapter = new MakeOrderAdapter(MakeOrder.this, listProducts);
             recyclerMakeORders.setAdapter(adapter);
-           // sendNotification();
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -162,16 +148,7 @@ public class MakeOrder extends AppCompatActivity implements Response.ErrorListen
 
     }
 
-    private void sendNotification() {
-        String title = "Sin stock";
-        String message = "suministrar productos";
 
-        if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(message)) {
-            Notification.Builder nb = notificationHandler.createNotification(title, message, isHighImportance);
-            notificationHandler.getManager().notify(++counter, nb.build());
-            notificationHandler.publishNotificationSummaryGroup(isHighImportance);
-        }
-    }
 
     private void init() {
         recyclerMakeORders = (RecyclerView) findViewById(R.id.recyclerMakeOrders);
