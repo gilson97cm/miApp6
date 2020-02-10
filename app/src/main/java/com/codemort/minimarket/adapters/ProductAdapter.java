@@ -28,6 +28,7 @@ import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -48,6 +49,10 @@ import com.codemort.minimarket.model.ProductVo;
 import com.codemort.minimarket.model.ProviderVo;
 import com.codemort.minimarket.ui.activities.MyOrders;
 import com.codemort.minimarket.ui.activities.Providers;
+import com.codemort.minimarket.ui.fragments.product.AddProduct;
+import com.codemort.minimarket.ui.fragments.product.ListProducts;
+import com.codemort.minimarket.ui.fragments.provider.AddProvider;
+import com.codemort.minimarket.ui.fragments.provider.ListProviders;
 
 import android.widget.EditText;
 
@@ -105,6 +110,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     // JsonObjectRequest jsonObjectRequest;
     Util util;
+
+    AddProduct fragmentAddProduct;
+    ListProducts fragmentListProduct;
+
 
 
     public ProductAdapter(Context context, List<ProductVo> listProducts) {
@@ -180,6 +189,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             requestQueue = Volley.newRequestQueue(context);
             util = new Util();
 
+            fragmentAddProduct = new AddProduct();
+            fragmentListProduct = new ListProducts();
+
 
         }
 
@@ -235,6 +247,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
                     if (response.trim().equalsIgnoreCase("elimina")) {
                         //volver a llamar al fragmento
+                        ((FragmentActivity)context).getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragmentProduct, fragmentListProduct)
+                                .commit();
                         Toast.makeText(context, "Se ha eliminado con exito", Toast.LENGTH_SHORT).show();
                     } else {
                         if (response.trim().equalsIgnoreCase("noExiste")) {
@@ -338,6 +353,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
                     if (response.trim().equalsIgnoreCase("actualiza")){
 
+                        ((FragmentActivity)context).getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragmentProduct, fragmentListProduct)
+                                .commit();
+
                         Toast.makeText(context,"Se ha actualizado con exito",Toast.LENGTH_SHORT).show();
                     }else{
                         Toast.makeText(context,"No se ha actualizado ",Toast.LENGTH_SHORT).show();
@@ -436,7 +455,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         idProv = listProviderObject.get(position).getId().toString();
-                        Toast.makeText(context, "id: " + idProv, Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(context, "id: " + idProv, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -454,49 +473,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         }
 
         ///END LOGIC SPINNER
-
-
-      /*  private void sendMail() {
-            your_email = "elizabethminimarket@gmail.com";
-            your_pass = "doris_saquinga";
-            Session session = null;
-
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-
-            Properties properties = new Properties();
-            properties.put("mail.smtp.host", "smtp.googlemail.com");
-            properties.put("mail.smtp.socketFactory.port", "465");
-            properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-            properties.put("mail.smtp.auth", "true");
-            properties.put("mail.smtp.port", "465");
-
-            try {
-                session = Session.getDefaultInstance(properties, new Authenticator() {
-                    @Override
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(your_email, your_pass);
-                    }
-                });
-
-                if (session != null) {
-                    Message message = new MimeMessage(session);
-                    message.setFrom(new InternetAddress(your_email));
-                    message.setSubject("Pedido Minimarket");
-                    message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(txtDialogEmailProv.getText().toString()));
-                    message.setContent("<h4><strong>MINIMARKET ELIZABETH</strong><h4> <br>" +
-                            "<hr>"+
-                            "<strong>Detalle de pedido:</strong><br>" +
-                            "<hr>"+
-                            "PRODUCTO: <strong>"+txtDialogProductNameProv.getText().toString()+"</strong><br>"+
-                            "CANTIDAD: <strong>"+txtDialogCant.getText().toString()+"</strong>", "text/html; charset=utf-8");
-                    Transport.send(message);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }*/
 
 
     }

@@ -71,11 +71,11 @@
                         android:orientation="vertical">
 
                         <EditText
-                            android:background="@drawable/border_color"
                             android:id="@+id/txtNameAdmin"
                             style="@style/Widget.AppCompat.EditText"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
+                            android:background="@drawable/border_color"
                             android:hint="Nombre"
                             android:inputType="textCapWords"
                             android:paddingLeft="15dp" />
@@ -106,12 +106,12 @@
                         android:orientation="vertical">
 
                         <EditText
-                            android:background="@drawable/border_color"
-
                             android:id="@+id/txtLastNameAdmin"
+
                             style="@style/Widget.AppCompat.EditText"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
+                            android:background="@drawable/border_color"
                             android:hint="Apellido"
                             android:inputType="textCapWords"
                             android:paddingLeft="15dp"
@@ -144,11 +144,11 @@
                         android:orientation="vertical">
 
                         <EditText
-                            android:background="@drawable/border_color"
                             android:id="@+id/txtPhoneAdmin"
                             style="@style/Widget.AppCompat.EditText"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
+                            android:background="@drawable/border_color"
                             android:hint="Teléfono"
                             android:inputType="number"
                             android:paddingLeft="15dp" />
@@ -177,12 +177,13 @@
                         android:layout_height="40dp"
                         android:layout_weight="10"
                         android:orientation="vertical">
-                      <EditText
-                            android:background="@drawable/border_color"
+
+                        <EditText
                             android:id="@+id/txtEmailAdmin"
                             style="@style/Widget.AppCompat.EditText"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
+                            android:background="@drawable/border_color"
                             android:hint="Correo"
                             android:inputType="textEmailAddress"
                             android:paddingLeft="15dp"
@@ -215,11 +216,11 @@
                         android:orientation="vertical">
 
                         <EditText
-                            android:background="@drawable/border_color"
                             android:id="@+id/txtPassAdmin"
                             style="@style/Widget.AppCompat.EditText"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
+                            android:background="@drawable/border_color"
                             android:hint="Contraseña"
                             android:inputType="textPassword"
                             android:paddingLeft="15dp" />
@@ -250,11 +251,11 @@
                         android:orientation="vertical">
 
                         <EditText
-                            android:background="@drawable/border_color"
                             android:id="@+id/txtConfirmPass"
                             style="@style/Widget.AppCompat.EditText"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
+                            android:background="@drawable/border_color"
                             android:hint="Confirmar Contraseña"
                             android:inputType="textPassword"
                             android:paddingLeft="15dp"

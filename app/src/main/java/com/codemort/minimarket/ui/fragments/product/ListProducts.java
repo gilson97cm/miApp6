@@ -164,6 +164,8 @@ public class ListProducts extends Fragment implements Response.Listener<JSONObje
             progress.hide();
             ProductAdapter adapter = new ProductAdapter(getContext(),listProducts);
             recyclerProducts.setAdapter(adapter);
+            //adapter.updateList(listProducts);
+            adapter.notifyDataSetChanged();
 
         } catch (JSONException e) {
             e.printStackTrace();

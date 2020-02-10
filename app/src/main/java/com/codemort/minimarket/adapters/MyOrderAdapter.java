@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.StrictMode;
@@ -46,6 +47,7 @@ import com.codemort.minimarket.helpers.VolleySingleton;
 import com.codemort.minimarket.model.OrderVo;
 import com.codemort.minimarket.model.OrderVo;
 import com.codemort.minimarket.model.ProviderVo;
+import com.codemort.minimarket.ui.activities.MakeOrder;
 import com.codemort.minimarket.ui.activities.MyOrders;
 import com.codemort.minimarket.ui.activities.Providers;
 
@@ -227,7 +229,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyOrderV
 
                     if (response.trim().equalsIgnoreCase("elimina")) {
                         //volver a llamar al fragmento
-
+                        sendData();
                         Toast.makeText(context, "Se ha cancelado con exito", Toast.LENGTH_SHORT).show();
                     } else {
                         if (response.trim().equalsIgnoreCase("noExiste")) {
@@ -325,6 +327,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyOrderV
 
                     if (response.trim().equalsIgnoreCase("actualiza")) {
                         //txtDialogCant.setText("");
+                        sendData();
                         sendMail();
                         // photoPlant.setImageResource(R.drawable.not_photo);
                         Toast.makeText(context, "Se ha Enviado con exito", Toast.LENGTH_SHORT).show();
@@ -401,6 +404,23 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyOrderV
                 e.printStackTrace();
             }
 
+        }
+
+        private void sendData(){
+            SharedPreferences preferences = context.getSharedPreferences("dataLogin", Context.MODE_PRIVATE);
+            //   Boolean session = preferences.getBoolean("session",false);
+            String name = preferences.getString("name",null);
+            String last_name = preferences.getString("last_name",null);
+            String phone = preferences.getString("phone",null);
+            String email = preferences.getString("email",null);
+
+            Intent intent = new Intent(context, MyOrders.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("name", name);
+            intent.putExtra("last_name", last_name);
+            intent.putExtra("phone", phone);
+            intent.putExtra("email", email);
+            context.startActivity(intent);
         }
 
 

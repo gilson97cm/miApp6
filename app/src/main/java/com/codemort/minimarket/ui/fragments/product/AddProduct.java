@@ -200,7 +200,7 @@ public class AddProduct extends Fragment implements View.OnClickListener, Respon
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         idProv = listProviderObject.get(position).getId().toString();
-        Toast.makeText(getContext(), "ID: " + idProv, Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getContext(), "ID: " + idProv, Toast.LENGTH_SHORT).show();
     }
 
     @Override
