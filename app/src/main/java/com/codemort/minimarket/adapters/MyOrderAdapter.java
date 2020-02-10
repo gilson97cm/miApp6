@@ -275,7 +275,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyOrderV
             txtDialogOrderProd.setText(cardOrderProd.getText().toString());
             txtDialogOrderCant.setText(cardOrderCant.getText().toString());
             txtDialogOrderEmail.setText(cardOrderEmail.getText().toString());
-            
+
             btnDialogOrderSendUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

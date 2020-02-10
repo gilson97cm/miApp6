@@ -99,7 +99,7 @@ public class MakeOrderAdapter extends RecyclerView.Adapter<MakeOrderAdapter.Prod
     // JsonObjectRequest jsonObjectRequest;
     Util util;
 
-    String  emailProvider;
+    String  emailProvider = "";
 
 
     public MakeOrderAdapter(Context context, List<ProductVo> listProducts) {
@@ -260,12 +260,8 @@ public class MakeOrderAdapter extends RecyclerView.Adapter<MakeOrderAdapter.Prod
             btnDialogCancelMO = (Button) view.findViewById(R.id.btnDialogCancelMO);
             btnDialogSendOrderMO = (Button) view.findViewById(R.id.btnDialogSendOrderMO);
             loadProviders(cardNameProdMO.getText().toString());
-
             txtDialogIdProductMO.setText(cardIdProdMO.getText().toString());
             txtDialogProductMO.setText(cardNameProdMO.getText().toString());
-
-
-
             btnDialogSendOrderMO.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -288,16 +284,24 @@ public class MakeOrderAdapter extends RecyclerView.Adapter<MakeOrderAdapter.Prod
 
         private void validate() {
             String cant = txtDialogCantMO.getText().toString();
-
-            if (cant.isEmpty()) {
-                Toast.makeText(context, "Ingrese la cantidad.", Toast.LENGTH_SHORT).show();
+            if (cant.isEmpty() || emailProvider.equals("")) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("¡Error!")
+                ;            builder.setMessage("No se realizo el pedido. Registre proveedores para este producto.");
+                builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+              //  Toast.makeText(context, "Hay campos vacios.", Toast.LENGTH_SHORT).show();
             } else {
                 webServiceRegisterOrder();
             }
         }
-
         //START LOGIC SPINNER
-
         private void loadProviders(String product) {
             progress = new ProgressDialog(context);
             progress.setMessage("Cargando...");
@@ -310,7 +314,18 @@ public class MakeOrderAdapter extends RecyclerView.Adapter<MakeOrderAdapter.Prod
 
         @Override
         public void onErrorResponse(VolleyError error) {
-            Toast.makeText(context, "Sin Datos.", Toast.LENGTH_LONG).show();
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("¡Alerta!")
+;            builder.setMessage("No hay proveedores para este producto.");
+            builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            Toast.makeText(context, "No hay proveedores para este producto.", Toast.LENGTH_LONG).show();
             System.out.println();
             Log.d("ERROR: ", error.toString());
             progress.hide();
@@ -373,21 +388,6 @@ public class MakeOrderAdapter extends RecyclerView.Adapter<MakeOrderAdapter.Prod
         }
 
         ///END LOGIC SPINNER
-
-        //enviar y registrar pedido
-      /*  private void validate() {
-            String name = txtDialogEditProdName.getText().toString();
-            String detail = txtDialogEditProdDetail.getText().toString();
-            String price = txtDialogEditProdPrice.getText().toString();
-            String stock = txtDialogEditProdStock.getText().toString();
-
-
-            if (name.isEmpty() || detail.isEmpty() || price.isEmpty() || stock.isEmpty()) {
-                Toast.makeText(context, "Hay campos vacios.", Toast.LENGTH_SHORT).show();
-            } else {
-                webServiceUpdate();
-            }
-        }*/
 
           private void webServiceRegisterOrder() {
 

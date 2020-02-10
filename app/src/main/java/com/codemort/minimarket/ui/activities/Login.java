@@ -182,8 +182,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     private void loadData(){
         SharedPreferences preferences = getSharedPreferences("dataLogin", Context.MODE_PRIVATE);
-        txtEmail.setText(preferences.getString("email","codemort@email.com"));
-        txtPass.setText(preferences.getString("password","123456789"));
+        txtEmail.setText(preferences.getString("email",""));
+        txtPass.setText(preferences.getString("password",""));
 
     }
 }

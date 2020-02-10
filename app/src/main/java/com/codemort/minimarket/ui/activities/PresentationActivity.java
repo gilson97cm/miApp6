@@ -13,15 +13,15 @@ import android.widget.ProgressBar;
 import com.codemort.minimarket.R;
 
 public class PresentationActivity extends AppCompatActivity {
-    ProgressBar progressBar;
+  //  ProgressBar progressBar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_presentation);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.VISIBLE);
+       // progressBar = (ProgressBar) findViewById(R.id.progressBar);
+       // progressBar.setVisibility(View.VISIBLE);
 
         new Handler().postDelayed(new Runnable() {
             @Override
