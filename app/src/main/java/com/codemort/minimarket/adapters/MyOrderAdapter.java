@@ -364,8 +364,8 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyOrderV
             VolleySingleton.getIntanciaVolley(context).addToRequestQueue(stringRequest);
         }
         private void sendMail() {
-            your_email = "elizabethminimarket@gmail.com";
-            your_pass = "doris_saquinga";
+            your_email = Util.EMAIL;
+            your_pass = Util.PASSWORD;
             Session session = null;
 
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -391,7 +391,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyOrderV
                     message.setFrom(new InternetAddress(your_email));
                     message.setSubject("CAMBIO - Pedido Minimarket");
                     message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(txtDialogOrderEmail.getText().toString()));
-                    message.setContent("<h3><strong>CAMBIO EN EL PEDIDO</strong></h3><br><h4><strong>MINIMARKET ELIZABETH</strong><h4> <br>" +
+                    message.setContent("<h3><strong>CAMBIO EN EL PEDIDO</strong></h3><br><h4><strong>MINIMARKET</strong><h4> <br>" +
                             "<hr>"+
                             "<strong>Solicitud de cambio.</strong><br>" +
                             "<strong>Detalle de pedido:</strong><br>" +

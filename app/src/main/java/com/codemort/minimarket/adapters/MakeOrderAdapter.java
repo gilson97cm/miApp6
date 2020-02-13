@@ -449,8 +449,8 @@ public class MakeOrderAdapter extends RecyclerView.Adapter<MakeOrderAdapter.Prod
 
 
        private void sendMail() {
-            your_email = "elizabethminimarket@gmail.com";
-            your_pass = "doris_saquinga";
+            your_email = Util.EMAIL;
+            your_pass = Util.PASSWORD;
             Session session = null;
 
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -476,7 +476,7 @@ public class MakeOrderAdapter extends RecyclerView.Adapter<MakeOrderAdapter.Prod
                     message.setFrom(new InternetAddress(your_email));
                     message.setSubject("Pedido Minimarket");
                     message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailProvider));
-                    message.setContent("<h4><strong>MINIMARKET ELIZABETH</strong><h4> <br>" +
+                    message.setContent("<h4><strong>MINIMARKET</strong><h4> <br>" +
                             "<hr>"+
                             "<strong>Detalle de pedido:</strong><br>" +
                             "<hr>"+

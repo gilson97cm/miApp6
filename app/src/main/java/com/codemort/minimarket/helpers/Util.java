@@ -12,7 +12,10 @@ import android.widget.ImageView;
 import java.io.ByteArrayOutputStream;
 
 public class Util {
-    final static String URL = "http://192.168.100.43/minimarket1/";
+    //correo y contraseña del correo que se van a enviar los correos
+   public final static String EMAIL = "";
+    public final static String PASSWORD = "";
+    final static String URL = "http://localhost:8000/minimarket1/";
 
     public String getHost() {
         return URL;
